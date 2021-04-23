@@ -33,6 +33,7 @@ class TutorialsFragment : Fragment() {
     lateinit var player2: MediaPlayer
     private val changedGamers = mutableListOf<GamerProgressClass>()
     var quantityGamers = 0
+    var quantityGamer = 0
 
     lateinit var navController: NavController
 
