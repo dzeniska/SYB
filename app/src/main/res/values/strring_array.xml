@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="question">
+        <item>Перечисли музеи</item>
+        <item>Перечисли композиторов</item>
+        <item>Перечисли библейских апостолов</item>
+        <item>Перечисли изобретателей</item>
+        <item>Перечисли способы ныряния в воду</item>
+        <item>Перечисли марки спортивной одежды</item>
+        <item>Перечисли страны, где используют доллары</item>
+    </string-array>
+</resources>

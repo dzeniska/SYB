@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#9500FFC4</color>
+    <color name="colorAccent">#29FF22</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="invisible">#0026C6DA</color>
+    <color name="colorBackgroundStatusBar">#FFD54F</color>
+    <color name="nav_bar_color">#FFB74D</color>
+    <color name="tv_start_color">#D8272727</color>
+    <color name="main_content_background_color">#FFF176</color>
+    <color name="drawer_background_color">#AED581</color>
+    <color name="game_background_color">#FBC02D</color>
+    <color name="game_background_color_progress">#0288D1</color>
+    <color name="white_new" />
+    <color name="mega_white">#EDEDFFF7</color>
+
+</resources>

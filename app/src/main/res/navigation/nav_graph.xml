@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/gameFragment">
+
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="com.dzenis_ska.kvachmach.UI.GameFragment"
+        android:label="fragment_game"
+        tools:layout="@layout/fragment_game" />
+    <fragment
+        android:id="@+id/tutorialsFragment"
+        android:name="com.dzenis_ska.kvachmach.UI.TutorialsFragment"
+        android:label="fragment_tutorials"
+        tools:layout="@layout/fragment_tutorials" />
+    <fragment
+        android:id="@+id/progessFragment"
+        android:name="com.dzenis_ska.kvachmach.UI.ProgessFragment"
+        android:label="fragment_progess"
+        tools:layout="@layout/fragment_progess" />
+</navigation>

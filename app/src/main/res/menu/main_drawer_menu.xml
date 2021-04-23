@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="KvathMath">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item android:title="@string/play"
+                    android:id="@+id/id_enter"
+                    android:icon="@drawable/ic_play"
+                    >
+                </item>
+                <item android:title="@string/tutorial"
+                    android:id="@+id/id_tutorial"
+                    android:icon="@drawable/ic_tutorial"
+                    >
+                </item>
+                <item android:title="@string/gamers"
+                    android:id="@+id/id_progress"
+                    android:icon="@drawable/ic_buddha"
+                    >
+                </item>
+            </group>
+
+        </menu>
+    </item>
+
+
+</menu>
