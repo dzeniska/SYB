@@ -11,9 +11,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.dzenis_ska.kvachmach.Constants
 import com.dzenis_ska.kvachmach.GamerProgressClass
+import com.dzenis_ska.kvachmach.ItemTouchMoveCallback
 import com.dzenis_ska.kvachmach.R
 
-class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fragment: ProgessFragment): RecyclerView.Adapter<ProgressFragmentAdapter.ViewHolder>() {
+class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fragment: ProgessFragment): RecyclerView.Adapter<ProgressFragmentAdapter.ViewHolder>(), ItemTouchMoveCallback.ItemTouchAdapter {
     var const = 0
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val name = itemView.findViewById<TextView>(R.id.tvName)
@@ -29,16 +30,18 @@ class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fra
         holder.shake.setOnClickListener(){
             fragment.setFav(holder.adapterPosition)
         }
-
-//        itemView.setOnClickListener(){
-//
-//            holder.shake.setImageResource(R.drawable.ic_shake_out)
-//        }
         return holder
     }
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    override fun onMove(startPos: Int, targetPos: Int) {
+        val target = list[targetPos]
+        list[targetPos] = list[startPos]
+        list[startPos] = target
+        notifyItemMoved(startPos, targetPos)
     }
 
     override fun onBindViewHolder(holder: ProgressFragmentAdapter.ViewHolder, position: Int) {
@@ -64,4 +67,6 @@ class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fra
         const = con
         notifyDataSetChanged()
     }
+
+
 }

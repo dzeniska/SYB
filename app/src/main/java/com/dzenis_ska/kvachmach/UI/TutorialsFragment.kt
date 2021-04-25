@@ -72,12 +72,7 @@ class TutorialsFragment : Fragment() {
                 | ${changedGamers[0].name}""".trimMargin()
             Log.d("!!!", "TF${changedGamers.size}")
         })
-        viewModel.liveNewName2.observe(viewLifecycleOwner, Observer{
-            changedGamers.clear()
-            for(n in 0 until it.size){
-                if(it[n].fav == 1) changedGamers.add(it[n])
-            }
-        })
+
         init()
 
 

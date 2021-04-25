@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "progress")
 data class  GamerProgressClass (
-    @PrimaryKey val id: Int,
+    @PrimaryKey var id: Int,
     val fav: Int = 0,
     val name: String,
     val questions: Int,

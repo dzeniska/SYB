@@ -15,20 +15,20 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dzenis_ska.kvachmach.Constants
-import com.dzenis_ska.kvachmach.GamerProgressClass
-import com.dzenis_ska.kvachmach.MainActivity
-import com.dzenis_ska.kvachmach.R
+import com.dzenis_ska.kvachmach.*
 import com.dzenis_ska.kvachmach.ViewModel.GameViewModel
 import com.dzenis_ska.kvachmach.databinding.FragmentProgessBinding
 import com.dzenis_ska.kvachmach.databinding.FragmentTutorialsBinding
 
 
-class ProgessFragment : Fragment() {
+class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     lateinit var rootElement: FragmentProgessBinding
     lateinit var viewModel: GameViewModel
-    lateinit var adapter: ProgressFragmentAdapter
     private val names = mutableListOf<GamerProgressClass>()
+    val adapter = ProgressFragmentAdapter(names, this)
+    val dragCallback = ItemTouchMoveCallback(adapter, this)
+    val touchHelper = ItemTouchHelper(dragCallback)
+
     var id: Int? = 0
     var pref: SharedPreferences? = null
     lateinit var navController: NavController
@@ -67,21 +67,16 @@ class ProgessFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navController = findNavController()
-        adapter = ProgressFragmentAdapter(names, this)
-        rootElement.recyclerViewGamers.adapter = adapter
-        rootElement.recyclerViewGamers.layoutManager = LinearLayoutManager(activity)
-//        adapter.notifyDataSetChanged()
-
-        val clback = NameCallback(this)
-        val helper = ItemTouchHelper(clback)
-        helper.attachToRecyclerView(rootElement.recyclerViewGamers)
+        init()
 
         viewModel.getAllNames()
 
         viewModel.liveNewName.observe(viewLifecycleOwner, Observer{
-            adapter.updateAdapter(it, Constants.CHANGE_GAMERS)
-            Log.d("!!!", "PF${it.size}")
+            if(viewModel.index == 0){
+                adapter.updateAdapter(it, Constants.CHANGE_GAMERS)
+                Log.d("!!!", "PF${it.size}")
+            }
+
         })
 
         rootElement.floatingActionButton.setOnClickListener(){
@@ -98,6 +93,24 @@ class ProgessFragment : Fragment() {
 
 
     }
+
+    private fun init() {
+        navController = findNavController()
+//        adapter = ProgressFragmentAdapter(names, this)
+        rootElement.recyclerViewGamers.adapter = adapter
+        rootElement.recyclerViewGamers.layoutManager = LinearLayoutManager(activity)
+//        adapter.notifyDataSetChanged()
+
+
+        touchHelper.attachToRecyclerView(rootElement.recyclerViewGamers)
+//        val clback = NameCallback(this)
+//        val helper = ItemTouchHelper(clback)
+//        helper.attachToRecyclerView(rootElement.recyclerViewGamers)
+    }
+    override fun onMove(startPos: Int, targetPos: Int) {
+        viewModel.replase(startPos, targetPos)
+    }
+
     fun deleteName(id: Int){
 //        Log.d("!!!", "id = $id")
         viewModel.deleteName(id)

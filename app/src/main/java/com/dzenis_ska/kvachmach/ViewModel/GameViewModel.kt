@@ -22,67 +22,64 @@ class GameViewModel(val localModel: LocalModel): ViewModel(){
 
     var liveData = MutableLiveData<String>()
 
-    val getAll = mutableListOf<GamerProgressClass>()
+    val getAllG = mutableListOf<GamerProgressClass>()
 
     var liveNewName = MutableLiveData<MutableList<GamerProgressClass>>()
-    var liveNewName2 = MutableLiveData<MutableList<GamerProgressClass>>()
+
+    var index: Int = 0
 
 
 
     fun insertNewName(progress: GamerProgressClass){
         scope.launch {
             localModel.insertNewName(progress)
-            getAll.add(progress)
-            liveNewName.postValue(getAll)
+            getAllG.add(progress)
+            index = 0
+            liveNewName.postValue(getAllG)
         }
     }
 
     fun getAllNames(){
         scope.launch {
             val data = localModel.getAllNames()
-            getAll.clear()
-            getAll.addAll(data)
+            getAllG.clear()
+            getAllG.addAll(data)
+            index = 0
             liveNewName.postValue(data)
 
         }
     }
-    fun getAllNames2(){
-        scope.launch {
-            val data = localModel.getAllNames()
-            getAll.clear()
-            getAll.addAll(data)
-            liveNewName2.postValue(data)
 
-        }
-    }
     fun deleteName(num: Int){
         scope.launch {
-            val id = getAll[num].id
+            val id = getAllG[num].id
             localModel.deleteName(id)
-            getAll.removeAt(num)
+            getAllG.removeAt(num)
 //            getAll.addAll(data)
-            liveNewName.postValue(getAll)
+            index = 0
+            liveNewName.postValue(getAllG)
 
         }
     }
     fun isFav(num: Int){
         scope.launch {
-            val id = getAll[num].id
-            val isFav = getAll[num].fav
-            val repl = getAll.get(num)
+            val id = getAllG[num].id
+            val isFav = getAllG[num].fav
+            val repl = getAllG.get(num)
 
             if (isFav == 1){
                 repl2 = GamerProgressClass(repl.id, 0, repl.name, repl.questions, repl.answers, repl.progress)
-                getAll.removeAt(num)
-                getAll.add(num, repl2!!)
+                getAllG.removeAt(num)
+                getAllG.add(num, repl2!!)
                 localModel.isFav(id, 0)
             }else{
                 repl2 = GamerProgressClass(repl.id, 1, repl.name, repl.questions, repl.answers, repl.progress)
-                getAll.removeAt(num)
-                getAll.add(num, repl2!!)
+                getAllG.removeAt(num)
+                getAllG.add(num, repl2!!)
                 localModel.isFav(id, 1)
             }
-            liveNewName.postValue(getAll)
+            index = 0
+            liveNewName.postValue(getAllG)
 
         }
     }
@@ -91,6 +88,33 @@ class GameViewModel(val localModel: LocalModel): ViewModel(){
         scope.launch {
 
             localModel.sendProgress(id, numQuestion, numAnsvers, numprogress)
+
+        }
+    }
+
+    fun replase(startPos: Int, targetPos: Int) {
+        scope.launch {
+            val target = getAllG[targetPos]
+            val targetId = getAllG[targetPos].id
+            val targetFav = getAllG[targetPos].fav
+            val targetName = getAllG[targetPos].name
+            val targetQuestions = getAllG[targetPos].questions
+            val targetAnswers = getAllG[targetPos].answers
+            val targetProgress = getAllG[targetPos].progress
+
+            val start = getAllG[startPos]
+            val startId = getAllG[startPos].id
+            val startFav = getAllG[startPos].fav
+            val startName = getAllG[startPos].name
+            val startQuestions = getAllG[startPos].questions
+            val startAnswers = getAllG[startPos].answers
+            val startProgress = getAllG[startPos].progress
+
+            getAllG[targetPos] = GamerProgressClass(targetId, startFav, startName, startQuestions, startAnswers, startProgress)
+            getAllG[startPos] = GamerProgressClass(startId, targetFav, targetName, targetQuestions, targetAnswers, targetProgress)
+            localModel.replace(getAllG)
+            index = 1
+            liveNewName.postValue(getAllG)
 
         }
     }

@@ -44,6 +44,7 @@ class GameFragment : Fragment() {
                                         |Успеешь меньше чем за 10 секунд назвать четырёх композиторов?
                                         |Проверь себя в этой увлекательной викторине!""".trimMargin()
         rootElement.tvRules.startAnimation(anim)
+        rootElement.imgTut.startAnimation(anim)
 
     }
 
