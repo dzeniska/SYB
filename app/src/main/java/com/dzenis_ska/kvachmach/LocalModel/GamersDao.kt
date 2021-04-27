@@ -24,6 +24,8 @@ interface GamersDao {
     @Query("UPDATE progress SET fav = :isFav  WHERE id = :id ")
     suspend fun isFav(id: Int, isFav: Int)
 
+    @Query("UPDATE progress SET fav = 0, questions = 0, answers = 0, progress = 0 WHERE id = :id ")
+    suspend fun clearProgress(id: Int)
 
     @Query("UPDATE progress SET questions = :numQuestion, answers = :numAnsvers, progress = :numprogress  WHERE id = :id ")
     suspend fun sendProgress(id: Int, numQuestion: Int, numAnsvers: Int, numprogress: Int)

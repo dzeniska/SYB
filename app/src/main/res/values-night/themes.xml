@@ -23,6 +23,8 @@
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
     <style name="DrawerTextStyle">
-        <item name="android:textColor">@color/nav_bar_color</item>
+        <item name="android:titleTextColor">@color/nav_bar_color</item>
+        <item name="android:fontFamily">@font/font1</item>
+        <item name="android:textStyle">bold</item>
     </style>
 </resources>

@@ -9,8 +9,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -27,7 +30,7 @@ import kotlinx.coroutines.*
 class TutorialsFragment : Fragment() {
     lateinit var rootElement: FragmentTutorialsBinding
     private var job: Job? = null
-    var bool:Boolean = true
+    var bool: Boolean = true
     lateinit var player: MediaPlayer
     lateinit var viewModel: GameViewModel
     lateinit var player2: MediaPlayer
@@ -38,7 +41,7 @@ class TutorialsFragment : Fragment() {
     lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 //in here you can do logic when backPress is clicked
@@ -61,16 +64,24 @@ class TutorialsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.liveNewName.observe(viewLifecycleOwner, Observer{
+        viewModel.title = resources.getString(R.string.app_name)
+                (activity as AppCompatActivity).supportActionBar?.title = viewModel.title
+
+        viewModel.liveNewName.observe(viewLifecycleOwner, Observer {
             Log.d("!!!", "TF${it.size}")
             changedGamers.clear()
-            for(n in 0 until it.size){
-                if(it[n].fav == 1) changedGamers.add(it[n])
+            for (n in 0 until it.size) {
+                if (it[n].fav == 1) changedGamers.add(it[n])
+            }
+            if (changedGamers.size > 1) {
+                rootElement.tvQ.text = """ Первымм отвечать будет:
+                | ${changedGamers[0].name}""".trimMargin()
+                Log.d("!!!", "TF${changedGamers.size}")
+            } else {
+                rootElement.tvQ.text = """Нет времени объяснять, жми 
+                    |старт!""".trimMargin()
             }
 
-            rootElement.tvQ.text = """ Первымм отвечать будет:
-                | ${changedGamers[0].name}""".trimMargin()
-            Log.d("!!!", "TF${changedGamers.size}")
         })
 
         init()
@@ -79,27 +90,26 @@ class TutorialsFragment : Fragment() {
         val array: Array<String> = resources.getStringArray(R.array.question)
         val quantity = array.size
 
-        rootElement.flBtnAddGamers.setOnClickListener(){
+        rootElement.flBtnAddGamers.setOnClickListener() {
             navController.navigate(R.id.progessFragment)
         }
 
         rootElement.button.setOnClickListener {
 
-            if (rootElement.button.text == resources.getString(R.string.save)){
-                if(rootElement.edQ.text.isNotEmpty()){
+                if (rootElement.button.text == resources.getString(R.string.save)) {
+                if (rootElement.edQ.text.isNotEmpty()) {
+                    rootElement.tvQ.setTextColor(resources.getColor(R.color.white))
                     rootElement.button.text = resources.getString(R.string.start)
                     rootElement.edQ.visibility = View.GONE
-                    if(changedGamers.size > 1){
-//                        Log.d("!!!answ", "${changedGamers[quantityGamers]}")
-//                        Log.d("!!!answ", "${quantityGamers}")
+                    if (changedGamers.size > 1) {
 
                         updateProgress(changedGamers[quantityGamers], rootElement.edQ.text.toString().toInt())
 
-                        if(quantityGamers < changedGamers.size.minus(1)){
+                        if (quantityGamers < changedGamers.size.minus(1)) {
                             rootElement.tvQ.text = """Следующим отвечает:
                                 |${changedGamers[quantityGamers.plus(1)].name}""".trimMargin()
                             quantityGamers++
-                        }else{
+                        } else {
                             rootElement.tvQ.text = """Следующим отвечает:
                                 |${changedGamers[0].name}""".trimMargin()
                             quantityGamers = 0
@@ -107,27 +117,35 @@ class TutorialsFragment : Fragment() {
 
                     }
                     rootElement.edQ.text.clear()
-                }else {
+                } else {
                     Toast.makeText(activity as MainActivity, "Введите количество правильных ответов игрока!", Toast.LENGTH_LONG).show()
                 }
-            }else {
-//                rootElement.flBtnAddGamers.visibility= View.GONE
+            } else {
+
                 player.start()
                 if (bool) {
                     bool = false
                     rootElement.tvQ.text = array[(0 until quantity).random()]
                     rootElement.button.visibility = View.GONE
                     job = CoroutineScope(Dispatchers.Main).launch {
-                        for (j in 1 downTo -1) {
-                            count()
-                            rootElement.tvCounter.visibility = View.VISIBLE
+                        rootElement.tvCounter.visibility = View.VISIBLE
+                        for (j in 1 downTo 0) {
                             rootElement.tvCounter.text = j.toString()
+                            count()
                         }
                         bool = true
                         rootElement.tvCounter.visibility = View.GONE
                         rootElement.button.visibility = View.VISIBLE
-                        rootElement.button.text = resources.getString(R.string.save)
-                        rootElement.edQ.visibility = View.VISIBLE
+                        if (changedGamers.size > 1) {
+                            rootElement.tvQ.setTextColor(resources.getColor(R.color.game_background_color))
+                            rootElement.button.text = resources.getString(R.string.save)
+                            rootElement.edQ.visibility = View.VISIBLE
+                        } else {
+                            rootElement.button.text = resources.getString(R.string.start)
+                            rootElement.tvQ.setTextColor(resources.getColor(R.color.white))
+                            rootElement.tvQ.text = "Хуйня! Давай ещё разок!"
+                        }
+
                         player2.start()
                     }
 
@@ -146,7 +164,7 @@ class TutorialsFragment : Fragment() {
         val fav = gamerProgressClass.fav
         val numQuestion = gamerProgressClass.questions.plus(1)
         val numAnsvers = gamerProgressClass.answers.plus(ansv)
-        val numProgress = 100.minus(numQuestion*100/numAnsvers)
+        val numProgress = numAnsvers.minus(numQuestion)
         val gpc = GamerProgressClass(id, fav, name, numQuestion, numAnsvers, numProgress)
 
         changedGamers.removeAt(quantityGamers)
@@ -167,7 +185,7 @@ class TutorialsFragment : Fragment() {
     }
 
     private suspend fun count() = withContext(Dispatchers.IO) {
-            delay(1200)
+        delay(1200)
     }
 
 

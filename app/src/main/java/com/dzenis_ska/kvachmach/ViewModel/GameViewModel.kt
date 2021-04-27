@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 class GameViewModel(val localModel: LocalModel): ViewModel(){
     var job: Job? = null
 
+    var title: String = "SYB"
 
     val scope  = CoroutineScope(Dispatchers.IO)
 
@@ -59,6 +60,16 @@ class GameViewModel(val localModel: LocalModel): ViewModel(){
             index = 0
             liveNewName.postValue(getAllG)
 
+        }
+    }
+    fun clearProgress(num: Int){
+        scope.launch {
+            val repl = getAllG.get(num)
+            val rev = GamerProgressClass(repl.id, 0, repl.name, 0,0,0)
+            getAllG.removeAt(num)
+            getAllG.add(num, rev)
+            localModel.clearProgress(repl.id)
+            liveNewName.postValue(getAllG)
         }
     }
     fun isFav(num: Int){

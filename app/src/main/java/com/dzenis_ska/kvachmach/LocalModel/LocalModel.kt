@@ -25,6 +25,9 @@ class LocalModel(context: Context) {
     suspend fun isFav(id: Int, isFav: Int){
         dataBase.gamersDao().isFav(id, isFav)
     }
+    suspend fun clearProgress(id: Int){
+        dataBase.gamersDao().clearProgress(id)
+    }
 
     suspend fun sendProgress(id: Int, numQuestion: Int, numAnsvers: Int, numprogress: Int) {
         dataBase.gamersDao().sendProgress(id, numQuestion, numAnsvers, numprogress)

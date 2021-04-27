@@ -5,10 +5,15 @@
 
     <string name="enter">Пролог</string>
     <string name="play">Вперёд</string>
-    <string name="enter_quantity">Количество ответов</string>
+    <string name="noTime">Нет времени на размышления… жми уже</string>
+    <string name="enter_quantity">Введи количество правильных ответов</string>
     <string name="save">Сохранить</string>
+    <string name="repeat">Продолжим</string>
     <string name="start">Start</string>
     <string name="next_question">Следующий вопрос</string>
+
+    <string name="add_gamer">Добавь пиздюка для виторины</string>
+    <string name="tutorial_toolbar">Почитай, если нехуй делать!</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

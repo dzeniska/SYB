@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <item android:title="KvathMath">
+    <item android:title="@string/noTime"
+        >
         <menu>
             <group android:checkableBehavior="single">
                 <item android:title="@string/play"

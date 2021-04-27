@@ -19,13 +19,15 @@ class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fra
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val name = itemView.findViewById<TextView>(R.id.tvName)
         val progressBar = itemView.findViewById<ProgressBar>(R.id.progressBar)
-        val tvPercent = itemView.findViewById<TextView>(R.id.tvPercent)
+        val tvQuestions = itemView.findViewById<TextView>(R.id.tvQuestions)
+        val tvAnswers = itemView.findViewById<TextView>(R.id.tvAnswers)
         var shake = itemView.findViewById<ImageView>(R.id.imageViewShake)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProgressFragmentAdapter.ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
         val holder = ViewHolder(itemView)
+
 
         holder.shake.setOnClickListener(){
             fragment.setFav(holder.adapterPosition)
@@ -56,7 +58,8 @@ class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fra
             holder.shake.setImageResource(R.drawable.ic_shake_out)
         }
         holder.progressBar.progress = list[position].progress
-        holder.tvPercent.text = list[position].progress.toString()
+        holder.tvAnswers.text = "${list[position].answers} / "
+        holder.tvQuestions.text = list[position].questions.toString()
 
 
 

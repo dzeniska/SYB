@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -19,6 +20,7 @@ import com.dzenis_ska.kvachmach.*
 import com.dzenis_ska.kvachmach.ViewModel.GameViewModel
 import com.dzenis_ska.kvachmach.databinding.FragmentProgessBinding
 import com.dzenis_ska.kvachmach.databinding.FragmentTutorialsBinding
+import java.util.*
 
 
 class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
@@ -67,6 +69,10 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.title = resources.getString(R.string.add_gamer)
+                 (activity as AppCompatActivity).supportActionBar?.title = resources.getString(R.string.add_gamer)
+
+
         init()
 
         viewModel.getAllNames()
@@ -81,10 +87,14 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
 
         rootElement.floatingActionButton.setOnClickListener(){
             if(rootElement.edEnterName.text.isNotEmpty()){
-                val newName = GamerProgressClass(id!!, 1, rootElement.edEnterName.text.toString(), 0,0, 0)
-                id = id?.plus(1)
-                viewModel.insertNewName(newName)
-
+                val name = rootElement.edEnterName.text.toString()
+                if (name.toLowerCase(Locale.ROOT) == "жопа"){
+                    Toast.makeText(activity as MainActivity, "Да не \"жопа\" вводи, а имя своё, а жопа это Ты", Toast.LENGTH_SHORT).show()
+                }else{
+                    val newName = GamerProgressClass(id!!, 1, rootElement.edEnterName.text.toString(), 0,0, 0)
+                    id = id?.plus(1)
+                    viewModel.insertNewName(newName)
+                }
             }else{
                 Toast.makeText(activity as MainActivity, "Введи имя, жопа!", Toast.LENGTH_SHORT).show()
             }
@@ -96,16 +106,10 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
 
     private fun init() {
         navController = findNavController()
-//        adapter = ProgressFragmentAdapter(names, this)
         rootElement.recyclerViewGamers.adapter = adapter
         rootElement.recyclerViewGamers.layoutManager = LinearLayoutManager(activity)
-//        adapter.notifyDataSetChanged()
-
 
         touchHelper.attachToRecyclerView(rootElement.recyclerViewGamers)
-//        val clback = NameCallback(this)
-//        val helper = ItemTouchHelper(clback)
-//        helper.attachToRecyclerView(rootElement.recyclerViewGamers)
     }
     override fun onMove(startPos: Int, targetPos: Int) {
         viewModel.replase(startPos, targetPos)
@@ -128,6 +132,9 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
 
     fun setFav(adapterPosition: Int) {
         viewModel.isFav(adapterPosition)
+    }
+    fun clearProgress(adapterPosition: Int){
+        viewModel.clearProgress(adapterPosition)
     }
 
 }

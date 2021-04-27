@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var image: ImageView
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         rootElement = ActivityMainBinding.inflate(layoutInflater)
@@ -38,7 +39,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //        anim = AnimationUtils.loadAnimation(this, R.anim.translate)
         image = rootElement.navigationView.getHeaderView(0).findViewById(R.id.imClose)
         image.animation = AnimationUtils.loadAnimation(this, R.anim.translate)
+
+
         init()
+
         openCloseDrawer()
 
 
@@ -49,13 +53,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun openCloseDrawer() {
         //работа при откр-закр drawer
         rootElement.mainContent.intro.constraintLayout.visibility = View.INVISIBLE
+        supportActionBar?.title = "mnb"
         val toggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(
                 this, rootElement.drawerLayout, rootElement.mainContent.toolbar, R.string.open, R.string.close
         ) {
+
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
                 super.onDrawerSlide(drawerView, slideOffset)
                 val slideX = drawerView.width * slideOffset
 //                apptool.alpha = (1 - slideOffset)
+                Log.d("!!!", "${slideOffset}")
+
+                if(slideOffset > 0.6f){
+                    supportActionBar?.title = resources.getString(R.string.app_name)
+                }else if(slideOffset < 0.4f){
+                    supportActionBar?.title = viewModel.title
+                }
+
                 rootElement.mainContent.intro.constraintLayout.visibility = View.VISIBLE
                 rootElement.mainContent.intro.constraintLayout.setTranslationX(slideX)
                 rootElement.mainContent.intro.constraintLayout.setScaleX(1 - slideOffset)
@@ -72,6 +86,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navController = findNavController(R.id.navHost)
 //        rootElement.mainContent.toolbar.setupWithNavController(navController, rootElement.drawerLayout)
         setSupportActionBar(rootElement.mainContent.toolbar)
+
+
+
         rootElement.navigationView.setNavigationItemSelectedListener(this)
 
         val localModel = LocalModel(this)
