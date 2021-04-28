@@ -1,5 +1,7 @@
 package com.dzenis_ska.kvachmach
 
+import android.app.Activity
+import android.app.ProgressDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var viewModel: GameViewModel
     lateinit var anim: Animation
     lateinit var image: ImageView
+    val diallogInstr = DialogInstr(this)
 
 
 
@@ -41,8 +44,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         image.animation = AnimationUtils.loadAnimation(this, R.anim.translate)
 
 
-        init()
 
+        init()
+        viewModel.getAllNames()
         openCloseDrawer()
 
 
@@ -53,7 +57,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun openCloseDrawer() {
         //работа при откр-закр drawer
         rootElement.mainContent.intro.constraintLayout.visibility = View.INVISIBLE
-        supportActionBar?.title = "mnb"
         val toggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(
                 this, rootElement.drawerLayout, rootElement.mainContent.toolbar, R.string.open, R.string.close
         ) {
@@ -110,6 +113,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navController.navigate(R.id.progessFragment)
                 rootElement.drawerLayout.closeDrawer(GravityCompat.START)
             }
+            R.id.id_instruction -> {
+                diallogInstr.createInstrDialog(this)
+                rootElement.drawerLayout.closeDrawer(GravityCompat.START)
+            }
+
+
         }
         return true
     }

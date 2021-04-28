@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <item android:title="@string/noTime"
-        >
+    <item android:title="@string/noTime">
         <menu>
             <group android:checkableBehavior="single">
                 <item android:title="@string/play"
@@ -20,6 +19,11 @@
                 <item android:title="@string/gamers"
                     android:id="@+id/id_progress"
                     android:icon="@drawable/ic_buddha"
+                    >
+                </item>
+                <item android:title="@string/instruction"
+                    android:id="@+id/id_instruction"
+                    android:icon="@drawable/ic_instruction"
                     >
                 </item>
             </group>

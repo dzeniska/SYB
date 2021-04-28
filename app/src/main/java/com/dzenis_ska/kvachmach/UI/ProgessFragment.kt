@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +32,8 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     val adapter = ProgressFragmentAdapter(names, this)
     val dragCallback = ItemTouchMoveCallback(adapter, this)
     val touchHelper = ItemTouchHelper(dragCallback)
+    lateinit var anim: Animation
+
 
     var id: Int? = 0
     var pref: SharedPreferences? = null
@@ -73,9 +77,12 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
                  (activity as AppCompatActivity).supportActionBar?.title = resources.getString(R.string.add_gamer)
 
 
+
         init()
 
-        viewModel.getAllNames()
+//        viewModel.getAllNames()
+
+
 
         viewModel.liveNewName.observe(viewLifecycleOwner, Observer{
             if(viewModel.index == 0){
@@ -83,6 +90,11 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
                 Log.d("!!!", "PF${it.size}")
             }
 
+            if(it.size == 0){
+                rootElement.floatingActionButton.startAnimation(anim)
+            }else{
+                rootElement.floatingActionButton.clearAnimation()
+            }
         })
 
         rootElement.floatingActionButton.setOnClickListener(){
@@ -110,6 +122,7 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
         rootElement.recyclerViewGamers.layoutManager = LinearLayoutManager(activity)
 
         touchHelper.attachToRecyclerView(rootElement.recyclerViewGamers)
+        anim = AnimationUtils.loadAnimation(activity as MainActivity, R.anim.alpha_fab)
     }
     override fun onMove(startPos: Int, targetPos: Int) {
         viewModel.replase(startPos, targetPos)

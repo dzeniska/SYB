@@ -2,10 +2,11 @@
     <string name="app_name">SYB</string>
     <string name="tutorial">Правила игры!</string>
     <string name="gamers">Игроки и результаты</string>
+    <string name="instruction">Инструкция</string>
 
     <string name="enter">Пролог</string>
     <string name="play">Вперёд</string>
-    <string name="noTime">Нет времени на размышления… жми уже</string>
+    <string name="noTime">Нет времени размышлять… Отвечай</string>
     <string name="enter_quantity">Введи количество правильных ответов</string>
     <string name="save">Сохранить</string>
     <string name="repeat">Продолжим</string>
@@ -14,7 +15,6 @@
 
     <string name="add_gamer">Добавь пиздюка для виторины</string>
     <string name="tutorial_toolbar">Почитай, если нехуй делать!</string>
-
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

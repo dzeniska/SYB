@@ -36,7 +36,6 @@ class TutorialsFragment : Fragment() {
     lateinit var player2: MediaPlayer
     private val changedGamers = mutableListOf<GamerProgressClass>()
     var quantityGamers = 0
-    var quantityGamer = 0
 
     lateinit var navController: NavController
 
@@ -74,7 +73,7 @@ class TutorialsFragment : Fragment() {
                 if (it[n].fav == 1) changedGamers.add(it[n])
             }
             if (changedGamers.size > 1) {
-                rootElement.tvQ.text = """ Первымм отвечать будет:
+                rootElement.tvQ.text = """ Первым(ой) отвечает:
                 | ${changedGamers[0].name}""".trimMargin()
                 Log.d("!!!", "TF${changedGamers.size}")
             } else {
