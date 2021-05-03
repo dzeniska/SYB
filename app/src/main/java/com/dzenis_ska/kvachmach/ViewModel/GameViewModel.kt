@@ -80,7 +80,7 @@ class GameViewModel(val localModel: LocalModel) : ViewModel() {
     fun clearProgress(num: Int) {
         scope.launch {
             val repl = getAllG.get(num)
-            val rev = GamerProgressClass(repl.id, 0, repl.name, 0, 0, 0)
+            val rev = GamerProgressClass(repl.id, 1, repl.name, 0, 0, 0)
             getAllG.removeAt(num)
             getAllG.add(num, rev)
             localModel.clearProgress(repl.id)

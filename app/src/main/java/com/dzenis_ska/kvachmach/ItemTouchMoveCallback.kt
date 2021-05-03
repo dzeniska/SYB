@@ -79,6 +79,7 @@ class ItemTouchMoveCallback(val adapter: ProgressFragmentAdapter, val fragment: 
     }
 
     interface ItemTouchAdapter{
+
         fun onMove(startPos: Int, targetPos: Int)
     }
 }

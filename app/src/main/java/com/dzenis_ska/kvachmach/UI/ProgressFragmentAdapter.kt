@@ -1,18 +1,15 @@
 package com.dzenis_ska.kvachmach.UI
 
-import android.graphics.Bitmap
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.dzenis_ska.kvachmach.Constants
-import com.dzenis_ska.kvachmach.GamerProgressClass
-import com.dzenis_ska.kvachmach.ItemTouchMoveCallback
-import com.dzenis_ska.kvachmach.R
+import com.dzenis_ska.kvachmach.*
 
 class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fragment: ProgessFragment): RecyclerView.Adapter<ProgressFragmentAdapter.ViewHolder>(), ItemTouchMoveCallback.ItemTouchAdapter {
     var const = 0
@@ -22,6 +19,7 @@ class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fra
         val tvQuestions = itemView.findViewById<TextView>(R.id.tvQuestions)
         val tvAnswers = itemView.findViewById<TextView>(R.id.tvAnswers)
         var shake = itemView.findViewById<ImageView>(R.id.imageViewShake)
+        var shakeBrain = itemView.findViewById<ImageView>(R.id.imgBrainShake)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProgressFragmentAdapter.ViewHolder {
@@ -51,9 +49,11 @@ class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fra
         val fav = list[position].fav
         if (const == Constants.LIST_GAMERS){
             holder.shake.visibility = View.GONE
+            holder.shakeBrain.visibility = View.GONE
         }
         if(fav == 1){
             holder.shake.setImageResource(R.drawable.ic_shake_in)
+            holder.shakeBrain.animation = AnimationUtils.loadAnimation(fragment.context, R.anim.rotate)
         }else{
             holder.shake.setImageResource(R.drawable.ic_shake_out)
         }

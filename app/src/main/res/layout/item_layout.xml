@@ -62,6 +62,20 @@
             app:srcCompat="@drawable/background_icon_item" />
 
         <ImageView
+            android:id="@+id/imgBrainShake"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="28dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewShake"
+            app:layout_constraintEnd_toEndOf="@+id/imageViewShake"
+            app:layout_constraintStart_toStartOf="@+id/imageViewShake"
+            app:layout_constraintTop_toTopOf="@+id/imageViewShake"
+            app:srcCompat="@drawable/braintwo" />
+
+        <ImageView
             android:id="@+id/imageViewShake"
             android:layout_width="55dp"
             android:layout_height="55dp"

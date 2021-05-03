@@ -25,7 +25,7 @@ object WinnerDialog {
         CoroutineScope(Dispatchers.Main).launch {
             """
                     $winner
-                    won!!!
+                    The best brain shaker!!!
                 """.trimIndent().also { rootDialogElement.tvWinner.text = it }
 
             val player = MediaPlayer.create(act, R.raw.vals)

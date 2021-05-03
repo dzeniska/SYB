@@ -33,8 +33,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private var job: Job? = null
 
-    private var chooseImageFrag: ProgessFragment? = null
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,8 +69,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //                apptool.alpha = (1 - slideOffset)
 //                Log.d("!!!", "${slideOffset}")
 
+
                 if(slideOffset > 0.6f){
-                    supportActionBar?.title = resources.getString(R.string.app_name)
+                    if(supportActionBar?.title != resources.getString(R.string.add_gamer))
+                        supportActionBar?.title = resources.getString(R.string.app_name)
+
                 }else if(slideOffset < 0.4f){
                     supportActionBar?.title = viewModel.title
                 }
@@ -126,7 +127,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.id_instruction -> {
                 diallogInstr.createInstrDialog(this)
-                rootElement.drawerLayout.closeDrawer(GravityCompat.START)
+//                rootElement.drawerLayout.closeDrawer(GravityCompat.START)
             }
 
         }

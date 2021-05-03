@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.dzenis_ska.kvachmach.*
 import com.dzenis_ska.kvachmach.ViewModel.GameViewModel
 import com.dzenis_ska.kvachmach.databinding.FragmentProgessBinding
-import com.dzenis_ska.kvachmach.databinding.FragmentTutorialsBinding
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -30,7 +29,10 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     lateinit var rootElement: FragmentProgessBinding
     lateinit var viewModel: GameViewModel
     private val names = mutableListOf<GamerProgressClass>()
-    private val newPr = mutableListOf<GamerProgressClass>()
+    val act = MainActivity()
+
+
+
     val adapter = ProgressFragmentAdapter(names, this)
     val dragCallback = ItemTouchMoveCallback(adapter, this)
     val touchHelper = ItemTouchHelper(dragCallback)
@@ -76,7 +78,7 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.title = resources.getString(R.string.add_gamer)
-                 (activity as AppCompatActivity).supportActionBar?.title = resources.getString(R.string.add_gamer)
+                 (activity as AppCompatActivity).supportActionBar?.title = viewModel.title
 
         init()
 
