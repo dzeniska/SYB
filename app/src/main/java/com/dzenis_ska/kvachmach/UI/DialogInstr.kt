@@ -1,8 +1,9 @@
- package com.dzenis_ska.kvachmach
+ package com.dzenis_ska.kvachmach.UI
 
 import android.app.Activity
 import android.app.AlertDialog
 import androidx.core.view.GravityCompat
+import com.dzenis_ska.kvachmach.MainActivity
 import com.dzenis_ska.kvachmach.databinding.DiallogInstrBinding
 
 

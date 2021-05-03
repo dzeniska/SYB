@@ -7,17 +7,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dzenis_ska.kvachmach.GamerProgressClass
 import com.dzenis_ska.kvachmach.LocalModel.LocalModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
-class GameViewModel(val localModel: LocalModel): ViewModel(){
+class GameViewModel(val localModel: LocalModel) : ViewModel() {
     var job: Job? = null
 
-    var title: String = "SYB"
+    val array = mutableListOf<String>()
 
-    val scope  = CoroutineScope(Dispatchers.IO)
+    var bool: Boolean = true
+
+    var title: String = "Shake Your Brain"
+
+    val scope = CoroutineScope(Dispatchers.IO)
 
     var repl2: GamerProgressClass? = null
 
@@ -29,9 +30,22 @@ class GameViewModel(val localModel: LocalModel): ViewModel(){
 
     var index: Int = 0
 
+    fun getQuestion(): String {
 
 
-    fun insertNewName(progress: GamerProgressClass){
+            val quantity = array.size
+        val q = array[(0 until quantity).random()]
+            val index = array.indexOf(q)
+            array.removeAt(index)
+
+        Log.d("!!!q", q.toString())
+        Log.d("!!!q", array.size.toString())
+
+        return q
+    }
+
+
+    fun insertNewName(progress: GamerProgressClass) {
         scope.launch {
             localModel.insertNewName(progress)
             getAllG.add(progress)
@@ -40,7 +54,7 @@ class GameViewModel(val localModel: LocalModel): ViewModel(){
         }
     }
 
-    fun getAllNames(){
+    suspend fun getAllNames() = withContext(Dispatchers.IO) {
         scope.launch {
             val data = localModel.getAllNames()
             getAllG.clear()
@@ -51,7 +65,7 @@ class GameViewModel(val localModel: LocalModel): ViewModel(){
         }
     }
 
-    fun deleteName(num: Int){
+    fun deleteName(num: Int) {
         scope.launch {
             val id = getAllG[num].id
             localModel.deleteName(id)
@@ -62,28 +76,30 @@ class GameViewModel(val localModel: LocalModel): ViewModel(){
 
         }
     }
-    fun clearProgress(num: Int){
+
+    fun clearProgress(num: Int) {
         scope.launch {
             val repl = getAllG.get(num)
-            val rev = GamerProgressClass(repl.id, 0, repl.name, 0,0,0)
+            val rev = GamerProgressClass(repl.id, 0, repl.name, 0, 0, 0)
             getAllG.removeAt(num)
             getAllG.add(num, rev)
             localModel.clearProgress(repl.id)
             liveNewName.postValue(getAllG)
         }
     }
-    fun isFav(num: Int){
+
+    fun isFav(num: Int) {
         scope.launch {
             val id = getAllG[num].id
             val isFav = getAllG[num].fav
             val repl = getAllG.get(num)
 
-            if (isFav == 1){
+            if (isFav == 1) {
                 repl2 = GamerProgressClass(repl.id, 0, repl.name, repl.questions, repl.answers, repl.progress)
                 getAllG.removeAt(num)
                 getAllG.add(num, repl2!!)
                 localModel.isFav(id, 0)
-            }else{
+            } else {
                 repl2 = GamerProgressClass(repl.id, 1, repl.name, repl.questions, repl.answers, repl.progress)
                 getAllG.removeAt(num)
                 getAllG.add(num, repl2!!)

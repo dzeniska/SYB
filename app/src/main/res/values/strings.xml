@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SYB</string>
+    <string name="app_name">Shake Your Brain</string>
     <string name="tutorial">Правила игры!</string>
     <string name="gamers">Игроки и результаты</string>
     <string name="instruction">Инструкция</string>
@@ -16,9 +16,18 @@
     <string name="add_gamer">Добавь пиздюка для виторины</string>
     <string name="tutorial_toolbar">Почитай, если нехуй делать!</string>
 
+
+    <string name="discharge_progress">Сбросьте прогресс у победителя или у всех участников!</string>
+
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="rules">У тебя совсем нет времени объяснять. Времени хватит только на то, чтобы перечислить несколько понятий на указанную тему. Успеешь меньше чем за 10 секунд назвать четырёх композиторов? Проверь себя в этой увлекательной викторине!</string>
+    <string name="need_add_gamer">Для добавления игрока нажмите \"+\"</string>
+    <string name="queue">Вы можете менять очерёдность игроков зажав имя на 2 секундыи перетаскивая вверх или вниз</string>
+    <string name="fav_gamer">Выберите игроков для участия в индивидуальной викторине, нажимая \"БЛЕНДЕР\"</string>
+    <string name="need_delete_or_reprogress_gamer">Для сброса достижений игрока потяните \"ВПРАВО\".\n Для удаления игрока потяните \"ВЛЕВО\"</string>
 </resources>

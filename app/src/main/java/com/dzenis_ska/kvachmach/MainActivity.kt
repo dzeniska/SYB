@@ -1,7 +1,5 @@
 package com.dzenis_ska.kvachmach
 
-import android.app.Activity
-import android.app.ProgressDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -16,11 +14,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.dzenis_ska.kvachmach.LocalModel.LocalModel
-import com.dzenis_ska.kvachmach.UI.ProgressFragmentAdapter
+import com.dzenis_ska.kvachmach.UI.DialogInstr
+import com.dzenis_ska.kvachmach.UI.ProgessFragment
 import com.dzenis_ska.kvachmach.ViewModel.GameViewModel
 import com.dzenis_ska.kvachmach.ViewModel.GameViewModelFactory
 import com.dzenis_ska.kvachmach.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -30,6 +30,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var anim: Animation
     lateinit var image: ImageView
     val diallogInstr = DialogInstr(this)
+
+    private var job: Job? = null
+
+    private var chooseImageFrag: ProgessFragment? = null
 
 
 
@@ -46,7 +50,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         init()
-        viewModel.getAllNames()
+//        viewModel.getAllNames()
         openCloseDrawer()
 
 
@@ -65,7 +69,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 super.onDrawerSlide(drawerView, slideOffset)
                 val slideX = drawerView.width * slideOffset
 //                apptool.alpha = (1 - slideOffset)
-                Log.d("!!!", "${slideOffset}")
+//                Log.d("!!!", "${slideOffset}")
 
                 if(slideOffset > 0.6f){
                     supportActionBar?.title = resources.getString(R.string.app_name)
@@ -110,16 +114,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 rootElement.drawerLayout.closeDrawer(GravityCompat.START)
             }
             R.id.id_progress -> {
-                navController.navigate(R.id.progessFragment)
-                rootElement.drawerLayout.closeDrawer(GravityCompat.START)
+//                if(viewModel.bool){
+                    Log.d("!!!!", "==null")
+
+                job = CoroutineScope(Dispatchers.Main).launch {
+                    viewModel.getAllNames()
+                    navController.navigate(R.id.progessFragment)
+                    count()
+                    rootElement.drawerLayout.closeDrawer(GravityCompat.START)
+                }
             }
             R.id.id_instruction -> {
                 diallogInstr.createInstrDialog(this)
                 rootElement.drawerLayout.closeDrawer(GravityCompat.START)
             }
 
-
         }
         return true
+    }
+    private suspend fun count() = withContext(Dispatchers.IO) {
+        delay(450)
     }
 }

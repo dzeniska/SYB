@@ -70,6 +70,12 @@ class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fra
         const = con
         notifyDataSetChanged()
     }
+//    fun updateItem(updateGamer: GamerProgressClass, pos: Int, con: Int){
+////        list.removeAt(pos)
+//        const = con
+//        list.add(pos, updateGamer)
+//        notifyItemChanged(pos)
+//    }
 
 
 }

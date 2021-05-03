@@ -22,6 +22,7 @@ import com.dzenis_ska.kvachmach.*
 import com.dzenis_ska.kvachmach.ViewModel.GameViewModel
 import com.dzenis_ska.kvachmach.databinding.FragmentProgessBinding
 import com.dzenis_ska.kvachmach.databinding.FragmentTutorialsBinding
+import kotlinx.coroutines.*
 import java.util.*
 
 
@@ -29,10 +30,12 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     lateinit var rootElement: FragmentProgessBinding
     lateinit var viewModel: GameViewModel
     private val names = mutableListOf<GamerProgressClass>()
+    private val newPr = mutableListOf<GamerProgressClass>()
     val adapter = ProgressFragmentAdapter(names, this)
     val dragCallback = ItemTouchMoveCallback(adapter, this)
     val touchHelper = ItemTouchHelper(dragCallback)
     lateinit var anim: Animation
+    private var job: Job? = null
 
 
     var id: Int? = 0
@@ -45,7 +48,6 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
         activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 //in here you can do logic when backPress is clicked
-
                 navController.popBackStack(R.id.tutorialsFragment, true)
                 navController.popBackStack(R.id.progessFragment, true)
             }
@@ -76,8 +78,6 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
         viewModel.title = resources.getString(R.string.add_gamer)
                  (activity as AppCompatActivity).supportActionBar?.title = resources.getString(R.string.add_gamer)
 
-
-
         init()
 
 //        viewModel.getAllNames()
@@ -85,9 +85,13 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
 
 
         viewModel.liveNewName.observe(viewLifecycleOwner, Observer{
-            if(viewModel.index == 0){
-                adapter.updateAdapter(it, Constants.CHANGE_GAMERS)
-                Log.d("!!!", "PF${it.size}")
+
+
+            job = CoroutineScope(Dispatchers.Main).launch {
+//                count()
+                if(viewModel.index == 0){
+                    adapter.updateAdapter(it, Constants.CHANGE_GAMERS)
+                }
             }
 
             if(it.size == 0){
@@ -116,6 +120,10 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
 
     }
 
+    private suspend fun count() = withContext(Dispatchers.IO) {
+        delay(30)
+    }
+
     private fun init() {
         navController = findNavController()
         rootElement.recyclerViewGamers.adapter = adapter
@@ -136,6 +144,7 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     override fun onPause() {
         super.onPause()
         saveData(id)
+        viewModel.bool = false
     }
     fun saveData(i: Int?){
         val edit = pref?.edit()
@@ -148,6 +157,13 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     }
     fun clearProgress(adapterPosition: Int){
         viewModel.clearProgress(adapterPosition)
+    }
+
+
+
+    override fun onDetach() {
+        super.onDetach()
+        viewModel.bool = false
     }
 
 }

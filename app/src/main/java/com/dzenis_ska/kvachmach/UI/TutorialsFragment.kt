@@ -1,7 +1,7 @@
 package com.dzenis_ska.kvachmach.UI
 
 import android.annotation.SuppressLint
-import android.content.SharedPreferences
+import android.app.Activity
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
@@ -9,22 +9,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import com.dzenis_ska.kvachmach.Constants
 import com.dzenis_ska.kvachmach.GamerProgressClass
 import com.dzenis_ska.kvachmach.MainActivity
 import com.dzenis_ska.kvachmach.R
 import com.dzenis_ska.kvachmach.ViewModel.GameViewModel
 import com.dzenis_ska.kvachmach.databinding.FragmentTutorialsBinding
+import com.dzenis_ska.kvachmach.databinding.WinnerDiallogBinding
 import kotlinx.coroutines.*
 
 class TutorialsFragment : Fragment() {
@@ -64,7 +61,7 @@ class TutorialsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.title = resources.getString(R.string.app_name)
-                (activity as AppCompatActivity).supportActionBar?.title = viewModel.title
+        (activity as AppCompatActivity).supportActionBar?.title = viewModel.title
 
         viewModel.liveNewName.observe(viewLifecycleOwner, Observer {
             Log.d("!!!", "TF${it.size}")
@@ -80,14 +77,9 @@ class TutorialsFragment : Fragment() {
                 rootElement.tvQ.text = """Нет времени объяснять, жми 
                     |старт!""".trimMargin()
             }
-
         })
 
         init()
-
-
-        val array: Array<String> = resources.getStringArray(R.array.question)
-        val quantity = array.size
 
         rootElement.flBtnAddGamers.setOnClickListener() {
             navController.navigate(R.id.progessFragment)
@@ -95,14 +87,20 @@ class TutorialsFragment : Fragment() {
 
         rootElement.button.setOnClickListener {
 
-                if (rootElement.button.text == resources.getString(R.string.save)) {
+            if (rootElement.button.text == resources.getString(R.string.save)) {
                 if (rootElement.edQ.text.isNotEmpty()) {
                     rootElement.tvQ.setTextColor(resources.getColor(R.color.white))
                     rootElement.button.text = resources.getString(R.string.start)
                     rootElement.edQ.visibility = View.GONE
                     if (changedGamers.size > 1) {
 
+//                        if(changedGamers[quantityGamers].progress >= 25){
+//diallogWinner.createWinnerDialog(activity as MainActivity, "jopa")
+//                        }
+
                         updateProgress(changedGamers[quantityGamers], rootElement.edQ.text.toString().toInt())
+
+
 
                         if (quantityGamers < changedGamers.size.minus(1)) {
                             rootElement.tvQ.text = """Следующим отвечает:
@@ -113,7 +111,6 @@ class TutorialsFragment : Fragment() {
                                 |${changedGamers[0].name}""".trimMargin()
                             quantityGamers = 0
                         }
-
                     }
                     rootElement.edQ.text.clear()
                 } else {
@@ -124,7 +121,9 @@ class TutorialsFragment : Fragment() {
                 player.start()
                 if (bool) {
                     bool = false
-                    rootElement.tvQ.text = array[(0 until quantity).random()]
+
+                    rootElement.tvQ.text = viewModel.getQuestion()
+
                     rootElement.button.visibility = View.GONE
                     job = CoroutineScope(Dispatchers.Main).launch {
                         rootElement.tvCounter.visibility = View.VISIBLE
@@ -150,41 +149,54 @@ class TutorialsFragment : Fragment() {
 
                 }
             }
-
         }
-
     }
 
 
     private fun updateProgress(gamerProgressClass: GamerProgressClass, ansv: Int) {
-
         val id = gamerProgressClass.id
         val name = gamerProgressClass.name
         val fav = gamerProgressClass.fav
         val numQuestion = gamerProgressClass.questions.plus(1)
         val numAnsvers = gamerProgressClass.answers.plus(ansv)
         val numProgress = numAnsvers.minus(numQuestion)
+
         val gpc = GamerProgressClass(id, fav, name, numQuestion, numAnsvers, numProgress)
 
         changedGamers.removeAt(quantityGamers)
 
         changedGamers.add(quantityGamers, gpc)
-        viewModel.sendProgress(id, numQuestion, numAnsvers, numProgress)
+
+
+
+
+        if (numProgress >= 25)
+        {
+
+            WinnerDialog.createWinnerDialog(activity as MainActivity, name)
+
+            Log.d("!!!win25", numProgress.toString())
+        }
+        Log.d("!!!win", numProgress.toString())
+
+
+        viewModel.sendProgress(id, numQuestion, numAnsvers, numProgress * 4)
+
     }
 
 
     private fun init() {
         navController = findNavController()
-//        viewModel.getAllNames()
         player = MediaPlayer.create(activity as MainActivity, R.raw.fart_2)
         player2 = MediaPlayer.create(activity as MainActivity, R.raw.fart_3)
         player.isLooping = false
         player2.isLooping = false
+        if (viewModel.array.size == 0) viewModel.array.addAll(resources.getStringArray(R.array.question))
 
     }
 
     private suspend fun count() = withContext(Dispatchers.IO) {
-        delay(1200)
+        delay(1100)
     }
 
 
