@@ -9,13 +9,15 @@
         android:id="@+id/scrollView2"
         android:layout_width="350dp"
         android:layout_height="400dp"
+        android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,12 +35,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="24dp"
                     android:layout_marginEnd="24dp"
                     android:gravity="center"
                     android:inputType="textMultiLine"
                     android:text="@string/need_add_gamer"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,6 +49,7 @@
                     android:id="@+id/imageView"
                     android:layout_width="200dp"
                     android:layout_height="50dp"
+                    android:layout_margin="16dp"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="32dp"
@@ -58,6 +62,7 @@
                     android:id="@+id/tvDeleteOrRecycl"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
                     android:layout_marginTop="32dp"
                     android:gravity="center"
                     android:inputType="textMultiLine"
@@ -70,6 +75,7 @@
                     android:id="@+id/imageView5"
                     android:layout_width="200dp"
                     android:layout_height="150dp"
+                    android:layout_margin="16dp"
                     android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="@+id/imageView"
                     app:layout_constraintStart_toStartOf="@+id/imageView"
@@ -80,6 +86,7 @@
                     android:id="@+id/tvFav"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
                     android:layout_marginTop="32dp"
                     android:gravity="center"
                     android:inputType="textMultiLine"
@@ -93,6 +100,7 @@
                     android:id="@+id/imageView6"
                     android:layout_width="200dp"
                     android:layout_height="150dp"
+                    android:layout_margin="16dp"
                     android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="@+id/imageView5"
                     app:layout_constraintStart_toStartOf="@+id/imageView5"
@@ -103,6 +111,7 @@
                     android:id="@+id/tvMove"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
                     android:layout_marginTop="32dp"
                     android:layout_marginBottom="8dp"
                     android:gravity="center"
@@ -117,27 +126,64 @@
                     android:id="@+id/imageView7"
                     android:layout_width="200dp"
                     android:layout_height="150dp"
+                    android:layout_margin="16dp"
                     android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="@+id/imageView6"
                     app:layout_constraintStart_toStartOf="@+id/imageView6"
                     app:layout_constraintTop_toBottomOf="@+id/tvMove"
                     app:srcCompat="@drawable/up_down" />
 
+                <TextView
+                    android:id="@+id/tvWriteAnsw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:text="@string/write_result"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView7"
+                    app:layout_constraintStart_toStartOf="@+id/imageView7"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="200dp"
+                    android:layout_height="150dp"
+                    android:layout_margin="16dp"
+                    app:layout_constraintEnd_toEndOf="@+id/tvWriteAnsw"
+                    app:layout_constraintStart_toStartOf="@+id/tvWriteAnsw"
+                    app:layout_constraintTop_toBottomOf="@+id/tvWriteAnsw"
+                    app:srcCompat="@drawable/write_img" />
+
+                <TextView
+                    android:id="@+id/tvPS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:text="@string/ps"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView8"
+                    app:layout_constraintStart_toStartOf="@+id/imageView8"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+
+                <Button
+                    android:id="@+id/btnUnderstand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Понятно"
+
+                    app:layout_constraintEnd_toEndOf="@+id/tvPS"
+                    app:layout_constraintStart_toStartOf="@+id/tvPS"
+                    app:layout_constraintTop_toBottomOf="@+id/tvPS" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/btnUnderstand"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="Понятно"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/scrollView2"
-        app:layout_constraintStart_toStartOf="@+id/scrollView2"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,13 +2,16 @@ package com.dzenis_ska.kvachmach.UI
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -33,6 +36,7 @@ class TutorialsFragment : Fragment() {
     lateinit var player2: MediaPlayer
     private val changedGamers = mutableListOf<GamerProgressClass>()
     var quantityGamers = 0
+    var numToast = 0
 
     lateinit var navController: NavController
 
@@ -56,12 +60,18 @@ class TutorialsFragment : Fragment() {
     }
 
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "ShowToast")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.title = resources.getString(R.string.app_name)
         (activity as AppCompatActivity).supportActionBar?.title = viewModel.title
+
+//        if(changedGamers.size == 0){
+//            job = CoroutineScope(Dispatchers.Main).launch {
+//                viewModel.getAllNames()
+//            }
+//        }
 
         viewModel.liveNewName.observe(viewLifecycleOwner, Observer {
             Log.d("!!!", "TF${it.size}")
@@ -142,7 +152,16 @@ class TutorialsFragment : Fragment() {
                             rootElement.button.text = resources.getString(R.string.start)
                             rootElement.tvQ.setTextColor(resources.getColor(R.color.white))
                             rootElement.tvQ.text = "Хуйня! Давай ещё разок!"
-                        }
+                            if(numToast == 0){
+                                val toast = Toast.makeText(activity as MainActivity, "Для записи результата необходимо 2 и более участника! \n Зайдите в пункт меню: \"Игроки и результаты\"!",
+                                        Toast.LENGTH_LONG)
+                                toast.setGravity(Gravity.CENTER, 0, 0)
+                                val toastContainer: LinearLayout = toast.view as LinearLayout
+                                toastContainer.setBackgroundColor(Color.TRANSPARENT)
+                                toast.show()
+                                numToast++
+                            }
+                         }
 
                         player2.start()
                     }
@@ -159,7 +178,7 @@ class TutorialsFragment : Fragment() {
         val fav = gamerProgressClass.fav
         val numQuestion = gamerProgressClass.questions.plus(1)
         val numAnsvers = gamerProgressClass.answers.plus(ansv)
-        val numProgress = numAnsvers.minus(numQuestion)
+        val numProgress = numAnsvers/*.minus(numQuestion)*/
 
         val gpc = GamerProgressClass(id, fav, name, numQuestion, numAnsvers, numProgress)
 
