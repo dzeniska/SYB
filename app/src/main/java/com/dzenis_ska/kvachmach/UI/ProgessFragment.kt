@@ -47,13 +47,13 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                //in here you can do logic when backPress is clicked
-                navController.popBackStack(R.id.tutorialsFragment, true)
-                navController.popBackStack(R.id.progessFragment, true)
-            }
-        })
+//        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                //in here you can do logic when backPress is clicked
+//                navController.popBackStack(R.id.tutorialsFragment, true)
+//                navController.popBackStack(R.id.progessFragment, true)
+//            }
+//        })
     }
 
     override fun onResume() {
@@ -94,6 +94,8 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
                 if(viewModel.index == 0){
                     adapter.updateAdapter(it, Constants.CHANGE_GAMERS)
                 }
+
+
             }
 
             if(it.size == 0){

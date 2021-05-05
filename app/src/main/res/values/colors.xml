@@ -20,5 +20,7 @@
     <color name="game_background_color_progress">#0288D1</color>
     <color name="white_new" />
     <color name="mega_white">#EDEDFFF7</color>
+    <color name="toast_background_back">#D793AFA3</color>
+
 
 </resources>

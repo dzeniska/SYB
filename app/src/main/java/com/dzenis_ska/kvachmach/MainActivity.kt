@@ -1,13 +1,18 @@
 package com.dzenis_ska.kvachmach
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProvider
@@ -23,7 +28,7 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-
+    var attempt = 0
     lateinit var navController: NavController
     lateinit var rootElement: ActivityMainBinding
     lateinit var viewModel: GameViewModel
@@ -115,7 +120,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 rootElement.drawerLayout.closeDrawer(GravityCompat.START)
             }
             R.id.id_progress -> {
-//                if(viewModel.bool){
                     Log.d("!!!!", "==null")
 
                 job = CoroutineScope(Dispatchers.Main).launch {
@@ -135,5 +139,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     private suspend fun count() = withContext(Dispatchers.IO) {
         delay(450)
+    }
+
+    override fun onBackPressed() {
+
+        if(attempt == 0){
+//            navController.popBackStack()
+            Toast.makeText(this, "Нет, больше не жми сюда!",
+                    Toast.LENGTH_LONG).show()
+            attempt++
+        }else if(attempt == 1){
+            Toast.makeText(this, "Я предупреждал...",
+                    Toast.LENGTH_LONG).show()
+            super.onBackPressed()
+        }
+
+
     }
 }

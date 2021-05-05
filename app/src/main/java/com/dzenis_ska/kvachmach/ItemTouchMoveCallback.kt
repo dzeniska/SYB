@@ -33,7 +33,7 @@ class ItemTouchMoveCallback(val adapter: ProgressFragmentAdapter, val fragment: 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         if(direction == ItemTouchHelper.START){
             fragment.deleteName(viewHolder.adapterPosition)
-        }else{
+        }else if(direction == ItemTouchHelper.END){
             fragment.clearProgress(viewHolder.adapterPosition)
         }
 

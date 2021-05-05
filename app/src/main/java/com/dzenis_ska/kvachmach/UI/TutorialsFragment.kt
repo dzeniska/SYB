@@ -42,13 +42,13 @@ class TutorialsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                //in here you can do logic when backPress is clicked
-                navController.popBackStack(R.id.progessFragment, true)
-                navController.popBackStack(R.id.tutorialsFragment, true)
-            }
-        })
+//        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                //in here you can do logic when backPress is clicked
+//                navController.popBackStack(R.id.progessFragment, true)
+//                navController.popBackStack(R.id.tutorialsFragment, true)
+//            }
+//        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -137,7 +137,7 @@ class TutorialsFragment : Fragment() {
                     rootElement.button.visibility = View.GONE
                     job = CoroutineScope(Dispatchers.Main).launch {
                         rootElement.tvCounter.visibility = View.VISIBLE
-                        for (j in 9 downTo 0) {
+                        for (j in 1 downTo 0) {
                             rootElement.tvCounter.text = j.toString()
                             count()
                         }

@@ -1,5 +1,6 @@
 package com.dzenis_ska.kvachmach.UI
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -44,6 +45,7 @@ class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fra
         notifyItemMoved(startPos, targetPos)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ProgressFragmentAdapter.ViewHolder, position: Int) {
         holder.name.text = list[position].name
         val fav = list[position].fav
