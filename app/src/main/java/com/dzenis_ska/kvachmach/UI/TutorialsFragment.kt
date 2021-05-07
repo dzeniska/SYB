@@ -67,11 +67,7 @@ class TutorialsFragment : Fragment() {
         viewModel.title = resources.getString(R.string.app_name)
         (activity as AppCompatActivity).supportActionBar?.title = viewModel.title
 
-//        if(changedGamers.size == 0){
-//            job = CoroutineScope(Dispatchers.Main).launch {
-//                viewModel.getAllNames()
-//            }
-//        }
+
 
         viewModel.liveNewName.observe(viewLifecycleOwner, Observer {
             Log.d("!!!", "TF${it.size}")
@@ -104,13 +100,7 @@ class TutorialsFragment : Fragment() {
                     rootElement.edQ.visibility = View.GONE
                     if (changedGamers.size > 1) {
 
-//                        if(changedGamers[quantityGamers].progress >= 25){
-//diallogWinner.createWinnerDialog(activity as MainActivity, "jopa")
-//                        }
-
                         updateProgress(changedGamers[quantityGamers], rootElement.edQ.text.toString().toInt())
-
-
 
                         if (quantityGamers < changedGamers.size.minus(1)) {
                             rootElement.tvQ.text = """Следующим отвечает:
@@ -151,7 +141,7 @@ class TutorialsFragment : Fragment() {
                         } else {
                             rootElement.button.text = resources.getString(R.string.start)
                             rootElement.tvQ.setTextColor(resources.getColor(R.color.white))
-                            rootElement.tvQ.text = "Хуйня! Давай ещё разок!"
+                            rootElement.tvQ.text = "Жуйня! Давай ещё разок!"
                             if(numToast == 0){
                                 val toast = Toast.makeText(activity as MainActivity, "Для записи результата необходимо 2 и более участника! \n Зайдите в пункт меню: \"Игроки и результаты\"!",
                                         Toast.LENGTH_LONG)

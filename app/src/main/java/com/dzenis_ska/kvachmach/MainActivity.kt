@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 job = CoroutineScope(Dispatchers.Main).launch {
                     viewModel.getAllNames()
                     navController.navigate(R.id.progessFragment)
-                    count()
+                    count(450)
                     rootElement.drawerLayout.closeDrawer(GravityCompat.START)
                 }
             }
@@ -137,22 +137,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         return true
     }
-    private suspend fun count() = withContext(Dispatchers.IO) {
-        delay(450)
+    private suspend fun count(timeMillis: Long) = withContext(Dispatchers.IO) {
+        delay(timeMillis)
+        attempt = 0
     }
 
     override fun onBackPressed() {
 
-        if(attempt == 0){
-//            navController.popBackStack()
-            Toast.makeText(this, "Нет, больше не жми сюда!",
-                    Toast.LENGTH_LONG).show()
-            attempt++
-        }else if(attempt == 1){
-            Toast.makeText(this, "Я предупреждал...",
-                    Toast.LENGTH_LONG).show()
-            super.onBackPressed()
+        CoroutineScope(Dispatchers.Main).launch {
+            if(attempt == 0){
+                Toast.makeText(applicationContext, "Нет, не жми сюда второй раз подряд!",
+                        Toast.LENGTH_SHORT).show()
+                attempt++
+                        count(1500)
+
+            }else if(attempt == 1){
+                Toast.makeText(applicationContext, "Я предупреждал...",
+                        Toast.LENGTH_SHORT).show()
+                super.onBackPressed()
+            }
         }
+
+
 
 
     }

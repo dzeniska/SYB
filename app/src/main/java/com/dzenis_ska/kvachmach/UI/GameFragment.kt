@@ -51,7 +51,9 @@ class GameFragment() : Fragment() {
                                         |У тебя совсем нет времени объяснять.
                                         |Времени хватит только на то, чтобы перечислить несколько понятий на указанную тему.
                                         |Успеешь меньше чем за 10 секунд назвать четырёх композиторов?
-                                        |Проверь себя в этой увлекательной викторине!""".trimMargin()
+                                        |Проверь себя в этой увлекательной викторине!
+                                        |
+                                        |                           by dzenis_ska""".trimMargin()
         rootElement.tvRules.startAnimation(anim)
         rootElement.imgTut.startAnimation(anim)
 
