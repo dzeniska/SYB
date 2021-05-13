@@ -80,8 +80,9 @@ class TutorialsFragment : Fragment() {
                 | ${changedGamers[0].name}""".trimMargin()
                 Log.d("!!!", "TF${changedGamers.size}")
             } else {
-                rootElement.tvQ.text = """Нет времени объяснять, жми 
-                    |старт!""".trimMargin()
+                rootElement.tvQ.text = """Времени не существует, 
+                    |впринципе,
+                    |жми START!""".trimMargin()
             }
         })
 
@@ -127,7 +128,7 @@ class TutorialsFragment : Fragment() {
                     rootElement.button.visibility = View.GONE
                     job = CoroutineScope(Dispatchers.Main).launch {
                         rootElement.tvCounter.visibility = View.VISIBLE
-                        for (j in 1 downTo 0) {
+                        for (j in 9 downTo 0) {
                             rootElement.tvCounter.text = j.toString()
                             count()
                         }
@@ -205,7 +206,7 @@ class TutorialsFragment : Fragment() {
     }
 
     private suspend fun count() = withContext(Dispatchers.IO) {
-        delay(1100)
+        delay(1000)
     }
 
 
