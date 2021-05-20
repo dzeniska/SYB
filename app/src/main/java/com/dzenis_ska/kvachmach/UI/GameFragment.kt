@@ -11,9 +11,11 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProvider
+import com.dzenis_ska.kvachmach.LocalModel.LocalModel
 import com.dzenis_ska.kvachmach.MainActivity
 import com.dzenis_ska.kvachmach.R
 import com.dzenis_ska.kvachmach.ViewModel.GameViewModel
+import com.dzenis_ska.kvachmach.ViewModel.GameViewModelFactory
 import com.dzenis_ska.kvachmach.databinding.FragmentGameBinding
 
 class GameFragment() : Fragment() {
@@ -32,7 +34,11 @@ class GameFragment() : Fragment() {
     ): View? {
         rootElement = FragmentGameBinding.inflate(inflater)
         val view = rootElement.root
-        viewModel = ViewModelProvider(activity as MainActivity).get(GameViewModel::class.java)
+
+        val localModel = LocalModel(activity as MainActivity)
+        val factory = GameViewModelFactory(localModel)
+        viewModel = ViewModelProvider(activity as MainActivity, factory).get(GameViewModel::class.java)
+
         // Inflate the layout for this fragment
         return view
     }

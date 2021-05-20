@@ -30,6 +30,21 @@ class GameViewModel(val localModel: LocalModel) : ViewModel() {
 
     var index: Int = 0
 
+    // Для подсчёта круга
+    var quantityGamers: Int = 0
+    private var countGamers: Int = 0
+
+    fun everyLap(): Boolean{
+        countGamers++
+        return if(quantityGamers == countGamers){
+            countGamers = 0
+            true
+        }else{
+            false
+        }
+    }
+
+
     fun getQuestion(): String {
 
 

@@ -19,8 +19,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dzenis_ska.kvachmach.*
+import com.dzenis_ska.kvachmach.LocalModel.LocalModel
 import com.dzenis_ska.kvachmach.ViewModel.GameViewModel
+import com.dzenis_ska.kvachmach.ViewModel.GameViewModelFactory
 import com.dzenis_ska.kvachmach.databinding.FragmentProgessBinding
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -30,6 +34,7 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     lateinit var viewModel: GameViewModel
     private val names = mutableListOf<GamerProgressClass>()
     val act = MainActivity()
+
 
 
 
@@ -47,13 +52,6 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
-//            override fun handleOnBackPressed() {
-//                //in here you can do logic when backPress is clicked
-//                navController.popBackStack(R.id.tutorialsFragment, true)
-//                navController.popBackStack(R.id.progessFragment, true)
-//            }
-//        })
     }
 
     override fun onResume() {
@@ -61,6 +59,7 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
         pref = this.activity?.getSharedPreferences("FUCK", 0)
         id = pref?.getInt("counter", 1)!!
         Log.d("!!!", id.toString())
+        rootElement.adView.resume()
 
     }
 
@@ -70,7 +69,11 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     ): View? {
         rootElement = FragmentProgessBinding.inflate(inflater)
         val view = rootElement.root
-        viewModel = ViewModelProvider(activity as MainActivity).get(GameViewModel::class.java)
+
+        val localModel = LocalModel(activity as MainActivity)
+        val factory = GameViewModelFactory(localModel)
+        viewModel = ViewModelProvider(activity as MainActivity, factory).get(GameViewModel::class.java)
+
         return view
     }
 
@@ -82,20 +85,13 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
 
         init()
 
-//        viewModel.getAllNames()
-
-
-
         viewModel.liveNewName.observe(viewLifecycleOwner, Observer{
-
 
             job = CoroutineScope(Dispatchers.Main).launch {
 //                count()
                 if(viewModel.index == 0){
                     adapter.updateAdapter(it, Constants.CHANGE_GAMERS)
                 }
-
-
             }
 
             if(it.size == 0){
@@ -109,14 +105,14 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
             if(rootElement.edEnterName.text.isNotEmpty()){
                 val name = rootElement.edEnterName.text.toString()
                 if (name.toLowerCase(Locale.ROOT) == "жопа"){
-                    Toast.makeText(activity as MainActivity, "Да не \"жопа\" вводи, а имя своё, а жопа это Ты", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity as MainActivity, "Да не \"Ж..па\" вводи, а имя своё, а жопа это Ты", Toast.LENGTH_SHORT).show()
                 }else{
                     val newName = GamerProgressClass(id!!, 1, rootElement.edEnterName.text.toString(), 0,0, 0)
                     id = id?.plus(1)
                     viewModel.insertNewName(newName)
                 }
             }else{
-                Toast.makeText(activity as MainActivity, "Введи имя, жопа!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity as MainActivity, "Введи имя, Ж..па!", Toast.LENGTH_SHORT).show()
             }
             rootElement.edEnterName.text.clear()
         }
@@ -132,6 +128,8 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
         navController = findNavController()
         rootElement.recyclerViewGamers.adapter = adapter
         rootElement.recyclerViewGamers.layoutManager = LinearLayoutManager(activity)
+
+        initAds()
 
         touchHelper.attachToRecyclerView(rootElement.recyclerViewGamers)
         anim = AnimationUtils.loadAnimation(activity as MainActivity, R.anim.alpha_fab)
@@ -149,8 +147,9 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
         super.onPause()
         saveData(id)
         viewModel.bool = false
+        rootElement.adView.pause()
     }
-    fun saveData(i: Int?){
+    private fun saveData(i: Int?){
         val edit = pref?.edit()
         edit?.putInt("counter", i!!)
         edit?.apply()
@@ -163,11 +162,20 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
         viewModel.clearProgress(adapterPosition)
     }
 
-
-
     override fun onDetach() {
         super.onDetach()
         viewModel.bool = false
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        rootElement.adView.destroy()
+    }
+
+    private fun initAds(){
+        MobileAds.initialize(activity as MainActivity)
+        val adRequest = AdRequest.Builder().build()
+        rootElement.adView.loadAd(adRequest)
     }
 
 }

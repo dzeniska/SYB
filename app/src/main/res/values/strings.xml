@@ -17,7 +17,9 @@
     <string name="tutorial_toolbar">Почитай, если нехуй делать!</string>
 
 
-    <string name="discharge_progress">Сбросьте прогресс у победителя или у всех участников!</string>
+    <string name="discharge_progress">Обнулите прогресс у победителя или у всех участников викторины, чтобы начать новую игру!
+    Но это необязательно!)
+    </string>
 
 
 
@@ -43,4 +45,9 @@
     \n \"БЛЕНДЕР-жёлтый\" - вне игры
     </string>
     <string name="need_delete_or_reprogress_gamer">Для сброса достижений игрока потяните \"ВПРАВО\".\n Для удаления игрока потяните \"ВЛЕВО\"</string>
+
+    <!-- Реклама -->
+    <string name="ad_id">ca-app-pub-8644370805049292/7519786153</string>
+    <string name="ad_inter_id">ca-app-pub-8644370805049292/6614840540</string>
+
 </resources>

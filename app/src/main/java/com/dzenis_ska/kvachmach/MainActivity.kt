@@ -43,8 +43,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         rootElement = ActivityMainBinding.inflate(layoutInflater)
-        val view = rootElement.root
-        setContentView(view)
+        setContentView(rootElement.root)
 
 //        anim = AnimationUtils.loadAnimation(this, R.anim.translate)
         image = rootElement.navigationView.getHeaderView(0).findViewById(R.id.imClose)
