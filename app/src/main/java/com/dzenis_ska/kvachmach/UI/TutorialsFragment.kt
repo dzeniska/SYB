@@ -1,6 +1,8 @@
 package com.dzenis_ska.kvachmach.UI
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.AlertDialog
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Build
@@ -26,6 +28,12 @@ import com.dzenis_ska.kvachmach.R
 import com.dzenis_ska.kvachmach.ViewModel.GameViewModel
 import com.dzenis_ska.kvachmach.ViewModel.GameViewModelFactory
 import com.dzenis_ska.kvachmach.databinding.FragmentTutorialsBinding
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import kotlinx.coroutines.*
 
 class TutorialsFragment : Fragment() {
@@ -38,13 +46,12 @@ class TutorialsFragment : Fragment() {
     private val changedGamers = mutableListOf<GamerProgressClass>()
     var quantityGamers = 0
     var numToast = 0
-
+    var interAd: InterstitialAd? = null
 
     lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -59,7 +66,6 @@ class TutorialsFragment : Fragment() {
         return view
     }
 
-
     @SuppressLint("SetTextI18n", "ShowToast")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,16 +73,12 @@ class TutorialsFragment : Fragment() {
         viewModel.title = resources.getString(R.string.app_name)
         (activity as AppCompatActivity).supportActionBar?.title = viewModel.title
 
-
-
         viewModel.liveNewName.observe(viewLifecycleOwner, Observer {
             Log.d("!!!", "TF${it.size}")
             changedGamers.clear()
             for (n in 0 until it.size) {
                 if (it[n].fav == 1) changedGamers.add(it[n])
             }
-
-
 
             if (changedGamers.size > 1) {
                 rootElement.tvQ.text = """ Первым(ой) отвечает:
@@ -125,9 +127,7 @@ class TutorialsFragment : Fragment() {
                 player.start()
                 if (bool) {
                     bool = false
-
                     rootElement.tvQ.text = viewModel.getQuestion()
-
                     rootElement.button.visibility = View.GONE
                     job = CoroutineScope(Dispatchers.Main).launch {
                         rootElement.tvCounter.visibility = View.VISIBLE
@@ -207,7 +207,6 @@ class TutorialsFragment : Fragment() {
                 WinnerDialog.createWinnerDialog(activity as MainActivity, lieder, this)
 
 //                rootElement.tvDownProgress.visibility = View.VISIBLE
-
             }else{
                 if(listName.size > 1){
                     Toast.makeText(activity as MainActivity, "Лидируют: ${lieder}", Toast.LENGTH_LONG).show()
@@ -215,25 +214,60 @@ class TutorialsFragment : Fragment() {
                     Toast.makeText(activity as MainActivity, "Лидирует: ${lieder}", Toast.LENGTH_LONG).show()
                 }
             }
-
         }
-
     }
 
 
     private fun init() {
+        loadInterAd()
         navController = findNavController()
         player = MediaPlayer.create(activity as MainActivity, R.raw.fart_2)
         player2 = MediaPlayer.create(activity as MainActivity, R.raw.fart_3)
         player.isLooping = false
         player2.isLooping = false
         if (viewModel.array.size == 0) viewModel.array.addAll(resources.getStringArray(R.array.question))
-
     }
 
     private suspend fun count() = withContext(Dispatchers.IO) {
         delay(1000)
     }
 
+    private fun loadInterAd() {
+        val adRequest = AdRequest.Builder().build()
+        InterstitialAd.load(
+            context as MainActivity,
+            resources.getString(R.string.ad_inter_id),
+            adRequest,
+            object : InterstitialAdLoadCallback(){
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    interAd = null
+                }
+                override fun onAdLoaded(ad: InterstitialAd) {
+                    interAd = ad
+                }
+            }
+        )
+    }
 
+    fun showInterAd() {
+        if(interAd != null){
+            interAd?.fullScreenContentCallback = object : FullScreenContentCallback(){
+                override fun onAdDismissedFullScreenContent() {
+                    interAd = null
+                    loadInterAd()
+                }
+                override fun onAdFailedToShowFullScreenContent(ad: AdError) {
+                    interAd = null
+                    loadInterAd()
+                }
+                override fun onAdShowedFullScreenContent() {
+                    interAd = null
+                }
+            }
+            interAd?.show(context as MainActivity)
+        }else{
+            interAd = null
+            loadInterAd()
+        }
+    }
 }
