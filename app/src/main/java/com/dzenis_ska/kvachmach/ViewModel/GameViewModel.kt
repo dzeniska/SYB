@@ -66,6 +66,7 @@ class GameViewModel(val localModel: LocalModel) : ViewModel() {
             getAllG.add(progress)
             index = 0
             liveNewName.postValue(getAllG)
+
         }
     }
 
@@ -75,6 +76,7 @@ class GameViewModel(val localModel: LocalModel) : ViewModel() {
             getAllG.clear()
             getAllG.addAll(data)
             index = 0
+
             liveNewName.postValue(data)
 
         }

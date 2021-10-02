@@ -10,8 +10,9 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -30,13 +31,12 @@ import java.util.*
 
 
 class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
-    lateinit var rootElement: FragmentProgessBinding
-    lateinit var viewModel: GameViewModel
+    var rootElement: FragmentProgessBinding? = null
+//    lateinit var viewModel: GameViewModel
+    val viewModel: GameViewModel by activityViewModels{
+        GameViewModelFactory(LocalModel(activity as MainActivity))
+    }
     private val names = mutableListOf<GamerProgressClass>()
-    val act = MainActivity()
-
-
-
 
     val adapter = ProgressFragmentAdapter(names, this)
     val dragCallback = ItemTouchMoveCallback(adapter, this)
@@ -44,22 +44,15 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     lateinit var anim: Animation
     private var job: Job? = null
 
-
     var id: Int? = 0
     var pref: SharedPreferences? = null
     lateinit var navController: NavController
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onResume() {
         super.onResume()
         pref = this.activity?.getSharedPreferences("FUCK", 0)
         id = pref?.getInt("counter", 1)!!
         Log.d("!!!", id.toString())
-        rootElement.adView.resume()
+        rootElement!!.adView.resume()
 
     }
 
@@ -68,11 +61,11 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
         savedInstanceState: Bundle?
     ): View? {
         rootElement = FragmentProgessBinding.inflate(inflater)
-        val view = rootElement.root
+        val view = rootElement!!.root
 
-        val localModel = LocalModel(activity as MainActivity)
-        val factory = GameViewModelFactory(localModel)
-        viewModel = ViewModelProvider(activity as MainActivity, factory).get(GameViewModel::class.java)
+//        val localModel = LocalModel(activity as MainActivity)
+//        val factory = GameViewModelFactory(localModel)
+//        viewModel = ViewModelProvider(activity as MainActivity, factory).get(GameViewModel::class.java)
 
         return view
     }
@@ -85,36 +78,38 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
 
         init()
 
-        viewModel.liveNewName.observe(viewLifecycleOwner, Observer{
 
+        viewModel.liveNewName.observe(viewLifecycleOwner, {
+            Log.d("!!!", "$it")
             job = CoroutineScope(Dispatchers.Main).launch {
 //                count()
                 if(viewModel.index == 0){
+
                     adapter.updateAdapter(it, Constants.CHANGE_GAMERS)
                 }
             }
 
             if(it.size == 0){
-                rootElement.floatingActionButton.startAnimation(anim)
+                rootElement!!.floatingActionButton.startAnimation(anim)
             }else{
-                rootElement.floatingActionButton.clearAnimation()
+                rootElement!!.floatingActionButton.clearAnimation()
             }
         })
 
-        rootElement.floatingActionButton.setOnClickListener(){
-            if(rootElement.edEnterName.text.isNotEmpty()){
-                val name = rootElement.edEnterName.text.toString()
+        rootElement!!.floatingActionButton.setOnClickListener(){
+            if(rootElement!!.edEnterName.text.isNotEmpty()){
+                val name = rootElement!!.edEnterName.text.toString()
                 if (name.toLowerCase(Locale.ROOT) == "жопа"){
                     Toast.makeText(activity as MainActivity, "Да не \"Ж..па\" вводи, а имя своё, а жопа это Ты", Toast.LENGTH_SHORT).show()
                 }else{
-                    val newName = GamerProgressClass(id!!, 1, rootElement.edEnterName.text.toString(), 0,0, 0)
+                    val newName = GamerProgressClass(id!!, 1, rootElement!!.edEnterName.text.toString(), 0,0, 0)
                     id = id?.plus(1)
                     viewModel.insertNewName(newName)
                 }
             }else{
                 Toast.makeText(activity as MainActivity, "Введи имя, Ж..па!", Toast.LENGTH_SHORT).show()
             }
-            rootElement.edEnterName.text.clear()
+            rootElement!!.edEnterName.text.clear()
         }
 
 
@@ -126,12 +121,12 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
 
     private fun init() {
         navController = findNavController()
-        rootElement.recyclerViewGamers.adapter = adapter
-        rootElement.recyclerViewGamers.layoutManager = LinearLayoutManager(activity)
+        rootElement!!.recyclerViewGamers.adapter = adapter
+        rootElement!!.recyclerViewGamers.layoutManager = LinearLayoutManager(activity)
 
         initAds()
 
-        touchHelper.attachToRecyclerView(rootElement.recyclerViewGamers)
+        touchHelper.attachToRecyclerView(rootElement!!.recyclerViewGamers)
         anim = AnimationUtils.loadAnimation(activity as MainActivity, R.anim.alpha_fab)
     }
     override fun onMove(startPos: Int, targetPos: Int) {
@@ -141,13 +136,15 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     fun deleteName(id: Int){
 //        Log.d("!!!", "id = $id")
         viewModel.deleteName(id)
+        val pos = viewModel.getAllG[id]
+        adapter.showRestoreItemSnackbar(id, pos)
     }
 
     override fun onPause() {
         super.onPause()
         saveData(id)
         viewModel.bool = false
-        rootElement.adView.pause()
+        rootElement!!.adView.pause()
     }
     private fun saveData(i: Int?){
         val edit = pref?.edit()
@@ -169,13 +166,14 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
 
     override fun onDestroy() {
         super.onDestroy()
-        rootElement.adView.destroy()
+        rootElement!!.adView.destroy()
+        rootElement = null
     }
 
     private fun initAds(){
         MobileAds.initialize(activity as MainActivity)
         val adRequest = AdRequest.Builder().build()
-        rootElement.adView.loadAd(adRequest)
+        rootElement!!.adView.loadAd(adRequest)
     }
 
 }

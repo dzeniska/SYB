@@ -1,7 +1,6 @@
 package com.dzenis_ska.kvachmach.UI
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +10,12 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dzenis_ska.kvachmach.*
+import com.google.android.material.snackbar.Snackbar
 
 class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fragment: ProgessFragment): RecyclerView.Adapter<ProgressFragmentAdapter.ViewHolder>(), ItemTouchMoveCallback.ItemTouchAdapter {
     var const = 0
+    val fr = fragment
+    private val postsList: MutableList<GamerProgressClass>? = null
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val name = itemView.findViewById<TextView>(R.id.tvName)
         val progressBar = itemView.findViewById<ProgressBar>(R.id.progressBar)
@@ -71,6 +73,14 @@ class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fra
         list.addAll(newList)
         const = con
         notifyDataSetChanged()
+    }
+    fun showRestoreItemSnackbar(position: Int, newList: GamerProgressClass) {
+        Snackbar.make(fragment.rootElement!!.recyclerViewGamers, "Игрок был удалён!..", Snackbar.LENGTH_LONG)
+            .setAction("Вернуть") {
+//                postsList?.add(position, newList)
+                fragment.viewModel.insertNewName(newList)
+            }.show()
+//        132135
     }
 //    fun updateItem(updateGamer: GamerProgressClass, pos: Int, con: Int){
 ////        list.removeAt(pos)

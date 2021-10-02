@@ -46,7 +46,7 @@ object WinnerDialog {
 //            showInterAd(dialog, act)
             tutorialsFragment.showInterAd()
             dialog.dismiss()
-            fragment?.rootElement?.tvDownProgress?.visibility = View.VISIBLE
+            fragment?.rootElement!!.tvDownProgress?.visibility = View.VISIBLE
 //            Toast.makeText(act, act.resources.getText(R.string.discharge_progress), Toast.LENGTH_LONG).show()
         }
     }

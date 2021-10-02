@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProvider
@@ -31,14 +32,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     var attempt = 0
     lateinit var navController: NavController
     lateinit var rootElement: ActivityMainBinding
-    lateinit var viewModel: GameViewModel
-    lateinit var anim: Animation
     lateinit var image: ImageView
     val diallogInstr = DialogInstr(this)
 
     private var job: Job? = null
 
-
+//    lateinit var viewModel: GameViewModel
+    val viewModel: GameViewModel by viewModels{
+        GameViewModelFactory(LocalModel(this))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,17 +50,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //        anim = AnimationUtils.loadAnimation(this, R.anim.translate)
         image = rootElement.navigationView.getHeaderView(0).findViewById(R.id.imClose)
         image.animation = AnimationUtils.loadAnimation(this, R.anim.translate)
-
+//        val localModel = LocalModel(this)
+//        val factory = GameViewModelFactory(localModel)
+//        viewModel = ViewModelProvider(this, factory).get(GameViewModel::class.java)
 
 
         init()
-//        viewModel.getAllNames()
         openCloseDrawer()
-
-
     }
-
-
 
     fun openCloseDrawer() {
         //работа при откр-закр drawer
@@ -66,13 +65,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(
                 this, rootElement.drawerLayout, rootElement.mainContent.toolbar, R.string.open, R.string.close
         ) {
-
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
                 super.onDrawerSlide(drawerView, slideOffset)
                 val slideX = drawerView.width * slideOffset
 //                apptool.alpha = (1 - slideOffset)
 //                Log.d("!!!", "${slideOffset}")
-
 
                 if(slideOffset > 0.6f){
                     if(supportActionBar?.title != resources.getString(R.string.add_gamer))
@@ -99,13 +96,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //        rootElement.mainContent.toolbar.setupWithNavController(navController, rootElement.drawerLayout)
         setSupportActionBar(rootElement.mainContent.toolbar)
 
-
-
         rootElement.navigationView.setNavigationItemSelectedListener(this)
 
-        val localModel = LocalModel(this)
-        val factory = GameViewModelFactory(localModel)
-        viewModel = ViewModelProvider(this, factory).get(GameViewModel::class.java)
+
+//        viewModel = ViewModelProvider(this, factory).get(GameViewModel::class.java)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -119,8 +113,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 rootElement.drawerLayout.closeDrawer(GravityCompat.START)
             }
             R.id.id_progress -> {
-                    Log.d("!!!!", "==null")
-
                 job = CoroutineScope(Dispatchers.Main).launch {
                     viewModel.getAllNames()
                     navController.navigate(R.id.progessFragment)
@@ -142,7 +134,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onBackPressed() {
-
         CoroutineScope(Dispatchers.Main).launch {
             if(attempt == 0){
                 Toast.makeText(applicationContext, "Нет, не жми сюда второй раз подряд!",
@@ -156,9 +147,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 super.onBackPressed()
             }
         }
-
-
-
-
     }
 }

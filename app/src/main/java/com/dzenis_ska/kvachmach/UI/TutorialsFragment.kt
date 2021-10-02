@@ -1,8 +1,7 @@
 package com.dzenis_ska.kvachmach.UI
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Build
@@ -13,10 +12,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -37,11 +40,14 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import kotlinx.coroutines.*
 
 class TutorialsFragment : Fragment() {
-    lateinit var rootElement: FragmentTutorialsBinding
+    var rootElement: FragmentTutorialsBinding? = null
     private var job: Job? = null
     var bool: Boolean = true
     lateinit var player: MediaPlayer
-    lateinit var viewModel: GameViewModel
+//    lateinit var viewModel: GameViewModel
+    private val viewModel: GameViewModel by activityViewModels{
+        GameViewModelFactory(LocalModel(context as MainActivity))
+    }
     lateinit var player2: MediaPlayer
     private val changedGamers = mutableListOf<GamerProgressClass>()
     var quantityGamers = 0
@@ -50,18 +56,14 @@ class TutorialsFragment : Fragment() {
 
     lateinit var navController: NavController
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         rootElement = FragmentTutorialsBinding.inflate(inflater)
-        val view = rootElement.root
+        val view = rootElement!!.root
 
-        val localModel = LocalModel(activity as MainActivity)
-        val factory = GameViewModelFactory(localModel)
-        viewModel = ViewModelProvider(activity as MainActivity, factory).get(GameViewModel::class.java)
+//        val localModel = LocalModel(activity as MainActivity)
+//        val factory = GameViewModelFactory(localModel)
+//        viewModel = ViewModelProvider(activity as MainActivity, factory).get(GameViewModel::class.java)
 
         return view
     }
@@ -69,6 +71,14 @@ class TutorialsFragment : Fragment() {
     @SuppressLint("SetTextI18n", "ShowToast")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        rootElement!!.edQ.setOnEditorActionListener { _, actionId, _ ->
+            if(actionId == EditorInfo.IME_ACTION_DONE){
+                saveCount()
+                return@setOnEditorActionListener false
+            }
+            return@setOnEditorActionListener false
+        }
 
         viewModel.title = resources.getString(R.string.app_name)
         (activity as AppCompatActivity).supportActionBar?.title = viewModel.title
@@ -81,90 +91,99 @@ class TutorialsFragment : Fragment() {
             }
 
             if (changedGamers.size > 1) {
-                rootElement.tvQ.text = """ Первым(ой) отвечает:
+                rootElement!!.tvQ.text = """ Первым(ой) отвечает:
                 | ${changedGamers[0].name}""".trimMargin()
 
                 viewModel.quantityGamers = changedGamers.size
 
 //                Log.d("!!!size", "TF${viewModel.countGamers}")
             } else {
-                rootElement.tvQ.text = """Времени не существует, 
+                rootElement!!.tvQ.text = """Времени не существует, 
                     |впринципе,
                     |жми START!""".trimMargin()
             }
         })
 
         init()
+        rootElement!!.apply {
+            button.setOnClickListener {
 
-        rootElement.button.setOnClickListener {
-
-            if (rootElement.button.text == resources.getString(R.string.save)) {
-                if (rootElement.edQ.text.isNotEmpty()) {
-                    rootElement.tvQ.setTextColor(ContextCompat.getColor(activity as MainActivity, R.color.white))
-//                    rootElement.tvQ.setTextColor(resources.getColor(R.color.white))
-                    rootElement.button.text = resources.getString(R.string.start)
-                    rootElement.edQ.visibility = View.GONE
-                    if (changedGamers.size > 1) {
-
-                        updateProgress(changedGamers[quantityGamers], rootElement.edQ.text.toString().toInt())
-
-                        if (quantityGamers < changedGamers.size.minus(1)) {
-                            rootElement.tvQ.text = """Следующим отвечает:
-                                |${changedGamers[quantityGamers.plus(1)].name}""".trimMargin()
-                            quantityGamers++
-                        } else {
-                            rootElement.tvQ.text = """Следующим отвечает:
-                                |${changedGamers[0].name}""".trimMargin()
-                            quantityGamers = 0
-                        }
-                    }
-                    rootElement.edQ.text.clear()
+                if (rootElement!!.button.text == resources.getString(R.string.save)) {
+                    saveCount()
                 } else {
-                    Toast.makeText(activity as MainActivity, "Введите количество правильных ответов игрока!", Toast.LENGTH_LONG).show()
-                }
-            } else {
-                if(rootElement.tvDownProgress.visibility == View.VISIBLE) rootElement.tvDownProgress.visibility = View.GONE
-                player.start()
-                if (bool) {
-                    bool = false
-                    rootElement.tvQ.text = viewModel.getQuestion()
-                    rootElement.button.visibility = View.GONE
-                    job = CoroutineScope(Dispatchers.Main).launch {
-                        rootElement.tvCounter.visibility = View.VISIBLE
-                        for (j in 9 downTo 0) {
-                            rootElement.tvCounter.text = j.toString()
-                            count()
-                        }
-                        bool = true
-                        rootElement.tvCounter.visibility = View.GONE
-                        rootElement.button.visibility = View.VISIBLE
-                        if (changedGamers.size > 1) {
-                            rootElement.tvQ.setTextColor(ContextCompat.getColor(activity as MainActivity, R.color.game_background_color))
-//                            rootElement.tvQ.setTextColor(resources.getColor(R.color.game_background_color))
-                            rootElement.button.text = resources.getString(R.string.save)
-                            rootElement.edQ.visibility = View.VISIBLE
-                        } else {
-                            rootElement.button.text = resources.getString(R.string.start)
-                            rootElement.tvQ.setTextColor(ContextCompat.getColor(activity as MainActivity, R.color.white))
-//                            rootElement.tvQ.setTextColor(resources.getColor(R.color.white))
-                            rootElement.tvQ.text = "Маладца! Давай ещё разок!"
-                            if (numToast == 0) {
-                                val toast = Toast.makeText(activity as MainActivity, "Для записи результата необходимо 2 и более участника! \n Зайдите в пункт меню: \"Игроки и результаты\"!",
-                                        Toast.LENGTH_LONG)
-                                toast.setGravity(Gravity.CENTER, 0, 0)
-                                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-                                    toast.show()
-                                } else {
-                                    val toastContainer: LinearLayout = toast.view as LinearLayout
-                                    toastContainer.setBackgroundColor(Color.TRANSPARENT)
-                                    toast.show()
-                                }
-                                numToast++
+                    if(tvDownProgress.visibility == View.VISIBLE) tvDownProgress.visibility = View.GONE
+                    player.start()
+                    if (bool) {
+                        bool = false
+                        tvQ.text = viewModel.getQuestion()
+                        button.visibility = View.GONE
+                        job = CoroutineScope(Dispatchers.Main).launch {
+                            tvCounter.visibility = View.VISIBLE
+                            for (j in 9 downTo 0) {
+                                tvCounter.text = j.toString()
+                                count()
                             }
+                            bool = true
+                            tvCounter.visibility = View.GONE
+                            button.visibility = View.VISIBLE
+                            if (changedGamers.size > 1) {
+                                tvQ.setTextColor(ContextCompat.getColor(activity as MainActivity, R.color.game_background_color))
+//                            rootElement.tvQ.setTextColor(resources.getColor(R.color.game_background_color))
+                                button.text = resources.getString(R.string.save)
+                                edQ.visibility = View.VISIBLE
+                                showSoftKeyboard(edQ)
+                            } else {
+                                button.text = resources.getString(R.string.start)
+                                tvQ.setTextColor(ContextCompat.getColor(activity as MainActivity, R.color.white))
+//                            rootElement.tvQ.setTextColor(resources.getColor(R.color.white))
+                                tvQ.text = "Маладца! Давай ещё разок!"
+                                if (numToast == 0) {
+                                    val toast = Toast.makeText(activity as MainActivity, "Для записи результата необходимо 2 и более участника! \n Зайдите в пункт меню: \"Игроки и результаты\"!",
+                                        Toast.LENGTH_LONG)
+                                    toast.setGravity(Gravity.CENTER, 0, 0)
+                                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+                                        toast.show()
+                                    } else {
+                                        val toastContainer: LinearLayout = toast.view as LinearLayout
+                                        toastContainer.setBackgroundColor(Color.TRANSPARENT)
+                                        toast.show()
+                                    }
+                                    numToast++
+                                }
+                            }
+                            player2.start()
                         }
-                        player2.start()
                     }
                 }
+            }
+        }
+
+    }
+
+    private fun saveCount() {
+        rootElement!!.apply{
+            if (edQ.text.isNotEmpty()) {
+                tvQ.setTextColor(ContextCompat.getColor(activity as MainActivity, R.color.white))
+//                    rootElement.tvQ.requireCotext().getCompatColor(R.color.white)
+                button.text = resources.getString(R.string.start)
+                edQ.visibility = View.GONE
+                if (changedGamers.size > 1) {
+
+                    updateProgress(changedGamers[quantityGamers], edQ.text.toString().toInt())
+
+                    if (quantityGamers < changedGamers.size.minus(1)) {
+                        tvQ.text = """Следующим отвечает:
+                                |${changedGamers[quantityGamers.plus(1)].name}""".trimMargin()
+                        quantityGamers++
+                    } else {
+                        tvQ.text = """Следующим отвечает:
+                                |${changedGamers[0].name}""".trimMargin()
+                        quantityGamers = 0
+                    }
+                }
+                edQ.text.clear()
+            } else {
+                Toast.makeText(activity as MainActivity, "Введите количество правильных ответов игрока!", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -194,7 +213,7 @@ class TutorialsFragment : Fragment() {
             for (n in 0 until changedGamers.size) {
                 list.add(changedGamers[n].progress)
             }
-            val maximum = list.max()
+            val maximum = list.maxOrNull()
             for (n in 0 until changedGamers.size) {
                 if(changedGamers[n].progress == maximum){
                     listName.add(changedGamers[n].name)
@@ -268,6 +287,12 @@ class TutorialsFragment : Fragment() {
         }else{
             interAd = null
             loadInterAd()
+        }
+    }
+    private fun showSoftKeyboard(view: View) {
+        if (view.requestFocus()) {
+            val inputMethodManager: InputMethodManager = getActivity()?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
         }
     }
 }

@@ -9,7 +9,8 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.dzenis_ska.kvachmach.LocalModel.LocalModel
 import com.dzenis_ska.kvachmach.MainActivity
@@ -19,25 +20,32 @@ import com.dzenis_ska.kvachmach.ViewModel.GameViewModelFactory
 import com.dzenis_ska.kvachmach.databinding.FragmentGameBinding
 
 class GameFragment() : Fragment() {
-    lateinit var rootElement: FragmentGameBinding
+    private var rootElement: FragmentGameBinding? = null
     lateinit var anim: Animation
-    lateinit var viewModel: GameViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+//    val localModel = LocalModel(activity as MainActivity)
+//    val factory = GameViewModelFactory(localModel)
+//lateinit var viewModel: GameViewModel
+    private val viewModel: GameViewModel by activityViewModels{
+        GameViewModelFactory(LocalModel(context as MainActivity))
     }
 
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        rootElement = null
+    }
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
         rootElement = FragmentGameBinding.inflate(inflater)
-        val view = rootElement.root
+        val view = rootElement?.root
 
-        val localModel = LocalModel(activity as MainActivity)
-        val factory = GameViewModelFactory(localModel)
-        viewModel = ViewModelProvider(activity as MainActivity, factory).get(GameViewModel::class.java)
+//        val localModel = LocalModel(activity as MainActivity)
+//        val factory = GameViewModelFactory(localModel)
+//        viewModel = ViewModelProvider(activity as MainActivity, factory).get(GameViewModel::class.java)
+
 
         // Inflate the layout for this fragment
         return view
@@ -53,15 +61,15 @@ class GameFragment() : Fragment() {
         viewModel.title = resources.getString(R.string.tutorial)
 
         anim = AnimationUtils.loadAnimation(activity as MainActivity, R.anim.alpha)
-        rootElement.tvRules.text = """
+        rootElement!!.tvRules.text = """
                                         |У тебя совсем нет времени объяснять.
                                         |Времени хватит только на то, чтобы перечислить несколько понятий на указанную тему.
                                         |Успеешь меньше чем за 10 секунд назвать четырёх композиторов?
                                         |Проверь себя в этой увлекательной викторине!
                                         |
                                         |                           by dzenis_ska""".trimMargin()
-        rootElement.tvRules.startAnimation(anim)
-        rootElement.imgTut.startAnimation(anim)
+        rootElement!!.tvRules.startAnimation(anim)
+        rootElement!!.imgTut.startAnimation(anim)
 
     }
 
