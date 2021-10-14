@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -57,6 +58,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         init()
         openCloseDrawer()
+
     }
 
     fun openCloseDrawer() {
@@ -98,13 +100,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         rootElement.navigationView.setNavigationItemSelectedListener(this)
 
-
-//        viewModel = ViewModelProvider(this, factory).get(GameViewModel::class.java)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.id_enter -> {
+                job = CoroutineScope(Dispatchers.Main).launch {
+                    viewModel.getAllNames()
+                    job = null
+                }
                 navController.navigate(R.id.tutorialsFragment)
                 rootElement.drawerLayout.closeDrawer(GravityCompat.START)
             }
@@ -118,6 +122,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     navController.navigate(R.id.progessFragment)
                     count(450)
                     rootElement.drawerLayout.closeDrawer(GravityCompat.START)
+                    job = null
                 }
             }
             R.id.id_instruction -> {

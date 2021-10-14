@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/allles/KvachMach/app/src/main/res/drawable-anydpi/ic_go.xml" value="0.2203125" />
+        <entry key="..\:/allles/KvachMach/app/src/main/res/drawable/forgot_back.xml" value="0.2203125" />
+        <entry key="..\:/allles/KvachMach/app/src/main/res/drawable/forgot_back_normal.xml" value="0.2203125" />
+        <entry key="..\:/allles/KvachMach/app/src/main/res/drawable/forgot_back_pressed.xml" value="0.2203125" />
         <entry key="..\:/allles/KvachMach/app/src/main/res/layout/diallog_instr.xml" value="0.20416666666666666" />
         <entry key="..\:/allles/KvachMach/app/src/main/res/layout/fragment_game.xml" value="0.20416666666666666" />
         <entry key="..\:/allles/KvachMach/app/src/main/res/layout/fragment_progess.xml" value="0.20416666666666666" />

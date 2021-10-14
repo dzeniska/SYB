@@ -22,5 +22,8 @@
     <color name="mega_white">#EDEDFFF7</color>
     <color name="toast_background_back">#D793AFA3</color>
 
+    <color name="white_38">#60FFFFFF</color>
+    <color name="back_pressed_color">#612962FF</color>
+
 
 </resources>

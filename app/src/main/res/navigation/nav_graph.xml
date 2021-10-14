@@ -14,10 +14,26 @@
         android:id="@+id/tutorialsFragment"
         android:name="com.dzenis_ska.kvachmach.UI.TutorialsFragment"
         android:label="fragment_tutorials"
-        tools:layout="@layout/fragment_tutorials" />
+        tools:layout="@layout/fragment_tutorials" >
+        <action
+            android:id="@+id/action_tutorialsFragment_to_progessFragment"
+            app:destination="@id/progessFragment"
+            app:enterAnim="@anim/enter"
+            app:exitAnim="@anim/exit"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit" />
+    </fragment>
     <fragment
         android:id="@+id/progessFragment"
         android:name="com.dzenis_ska.kvachmach.UI.ProgessFragment"
         android:label="fragment_progess"
-        tools:layout="@layout/fragment_progess" />
+        tools:layout="@layout/fragment_progess" >
+        <action
+            android:id="@+id/action_progessFragment_to_tutorialsFragment"
+            app:destination="@id/tutorialsFragment"
+            app:enterAnim="@anim/enter"
+            app:exitAnim="@anim/exit"
+            app:popEnterAnim="@anim/pop_enter"
+            app:popExitAnim="@anim/pop_exit"/>
+    </fragment>
 </navigation>

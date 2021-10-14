@@ -1,5 +1,6 @@
 package com.dzenis_ska.kvachmach.UI
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +12,8 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -32,7 +31,7 @@ import java.util.*
 
 class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     var rootElement: FragmentProgessBinding? = null
-//    lateinit var viewModel: GameViewModel
+
     val viewModel: GameViewModel by activityViewModels{
         GameViewModelFactory(LocalModel(activity as MainActivity))
     }
@@ -47,6 +46,7 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     var id: Int? = 0
     var pref: SharedPreferences? = null
     lateinit var navController: NavController
+
     override fun onResume() {
         super.onResume()
         pref = this.activity?.getSharedPreferences("FUCK", 0)
@@ -59,17 +59,13 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         rootElement = FragmentProgessBinding.inflate(inflater)
-        val view = rootElement!!.root
 
-//        val localModel = LocalModel(activity as MainActivity)
-//        val factory = GameViewModelFactory(localModel)
-//        viewModel = ViewModelProvider(activity as MainActivity, factory).get(GameViewModel::class.java)
-
-        return view
+        return rootElement!!.root
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -84,9 +80,13 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
             job = CoroutineScope(Dispatchers.Main).launch {
 //                count()
                 if(viewModel.index == 0){
-
                     adapter.updateAdapter(it, Constants.CHANGE_GAMERS)
                 }
+                val changedGamers = mutableListOf<GamerProgressClass>()
+                for (n in 0 until it.size) {
+                    if (it[n].fav == 1) changedGamers.add(it[n])
+                }
+                if(changedGamers.size > 1) fabPlay(true) else fabPlay(false)
             }
 
             if(it.size == 0){
@@ -112,11 +112,22 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
             rootElement!!.edEnterName.text.clear()
         }
 
+        rootElement!!.fabPlay.setOnClickListener {
+            val fList = navController.backStack
 
+            fList.forEach {
+                Log.d("!!!fr", "${it.destination.label}")
+                if (it.destination.label == "fragment_tutorials") {
+                    navController.popBackStack()
+                    return@setOnClickListener
+                }
+            }
+            Log.d("!!!fr", "navigate")
+            navController.navigate(R.id.action_progessFragment_to_tutorialsFragment)
+        }
     }
-
-    private suspend fun count() = withContext(Dispatchers.IO) {
-        delay(30)
+    private fun fabPlay(isVisible: Boolean){
+        rootElement!!.fabPlay.isVisible = isVisible
     }
 
     private fun init() {
