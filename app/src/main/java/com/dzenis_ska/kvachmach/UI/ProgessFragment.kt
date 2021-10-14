@@ -145,7 +145,6 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     }
 
     fun deleteName(id: Int){
-//        Log.d("!!!", "id = $id")
         viewModel.deleteName(id)
         val pos = viewModel.getAllG[id]
         adapter.showRestoreItemSnackbar(id, pos)
