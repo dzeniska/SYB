@@ -6,17 +6,11 @@ import android.media.MediaPlayer
 import android.view.View
 import com.dzenis_ska.kvachmach.R
 import com.dzenis_ska.kvachmach.databinding.WinnerDiallogBinding
-import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import kotlinx.coroutines.*
 
 
 object WinnerDialog {
 
-//    var interAd: InterstitialAd? = null
     var fragment: TutorialsFragment? = null
 
     fun createWinnerDialog(act: Activity, winner: String, tutorialsFragment: TutorialsFragment) {

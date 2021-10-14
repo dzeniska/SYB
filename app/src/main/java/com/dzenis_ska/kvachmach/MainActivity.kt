@@ -1,28 +1,19 @@
 package com.dzenis_ska.kvachmach
 
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.dzenis_ska.kvachmach.LocalModel.LocalModel
 import com.dzenis_ska.kvachmach.UI.DialogInstr
-import com.dzenis_ska.kvachmach.UI.ProgessFragment
 import com.dzenis_ska.kvachmach.ViewModel.GameViewModel
 import com.dzenis_ska.kvachmach.ViewModel.GameViewModelFactory
 import com.dzenis_ska.kvachmach.databinding.ActivityMainBinding
@@ -48,13 +39,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         rootElement = ActivityMainBinding.inflate(layoutInflater)
         setContentView(rootElement.root)
 
-//        anim = AnimationUtils.loadAnimation(this, R.anim.translate)
         image = rootElement.navigationView.getHeaderView(0).findViewById(R.id.imClose)
         image.animation = AnimationUtils.loadAnimation(this, R.anim.translate)
 //        val localModel = LocalModel(this)
 //        val factory = GameViewModelFactory(localModel)
 //        viewModel = ViewModelProvider(this, factory).get(GameViewModel::class.java)
-
 
         init()
         openCloseDrawer()
@@ -127,7 +116,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.id_instruction -> {
                 diallogInstr.createInstrDialog(this)
-//                rootElement.drawerLayout.closeDrawer(GravityCompat.START)
             }
 
         }

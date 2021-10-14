@@ -13,8 +13,8 @@ android {
         applicationId "com.dzenis_ska.kvachmach"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 10
-        versionName "0.2.0"
+        versionCode 11
+        versionName "0.2.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

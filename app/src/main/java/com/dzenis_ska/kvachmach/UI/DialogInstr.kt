@@ -19,7 +19,6 @@ import com.dzenis_ska.kvachmach.databinding.DiallogInstrBinding
 
         rootDialogElement.btnUnderstand.setOnClickListener(){
             dialog.dismiss()
-//            activity.rootElement.drawerLayout.openDrawer(GravityCompat.START)
         }
 
         return dialog

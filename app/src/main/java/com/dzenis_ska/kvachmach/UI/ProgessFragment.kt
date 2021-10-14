@@ -78,7 +78,7 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
         viewModel.liveNewName.observe(viewLifecycleOwner, {
             Log.d("!!!", "$it")
             job = CoroutineScope(Dispatchers.Main).launch {
-//                count()
+//
                 if(viewModel.index == 0){
                     adapter.updateAdapter(it, Constants.CHANGE_GAMERS)
                 }
@@ -147,7 +147,7 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     fun deleteName(id: Int){
         viewModel.deleteName(id)
         val pos = viewModel.getAllG[id]
-        adapter.showRestoreItemSnackbar(id, pos)
+        adapter.showRestoreItemSnackbar(pos)
     }
 
     override fun onPause() {

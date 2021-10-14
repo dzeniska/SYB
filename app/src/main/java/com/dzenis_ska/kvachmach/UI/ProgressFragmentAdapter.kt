@@ -14,8 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fragment: ProgessFragment): RecyclerView.Adapter<ProgressFragmentAdapter.ViewHolder>(), ItemTouchMoveCallback.ItemTouchAdapter {
     var const = 0
-    val fr = fragment
-    private val postsList: MutableList<GamerProgressClass>? = null
+
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val name = itemView.findViewById<TextView>(R.id.tvName)
         val progressBar = itemView.findViewById<ProgressBar>(R.id.progressBar)
@@ -64,30 +63,18 @@ class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fra
         holder.progressBar.progress = list[position].progress
         holder.tvAnswers.text = "${list[position].answers} / "
         holder.tvQuestions.text = list[position].questions.toString()
-
-
-
     }
+
     fun updateAdapter(newList: MutableList<GamerProgressClass>, con: Int){
         list.clear()
         list.addAll(newList)
         const = con
         notifyDataSetChanged()
     }
-    fun showRestoreItemSnackbar(position: Int, newList: GamerProgressClass) {
+    fun showRestoreItemSnackbar(gamer: GamerProgressClass) {
         Snackbar.make(fragment.rootElement!!.recyclerViewGamers, "Игрок был удалён!..", Snackbar.LENGTH_LONG)
             .setAction("Вернуть") {
-//                postsList?.add(position, newList)
-                fragment.viewModel.insertNewName(newList)
+                fragment.viewModel.insertNewName(gamer)
             }.show()
-//        132135
     }
-//    fun updateItem(updateGamer: GamerProgressClass, pos: Int, con: Int){
-////        list.removeAt(pos)
-//        const = con
-//        list.add(pos, updateGamer)
-//        notifyItemChanged(pos)
-//    }
-
-
 }
