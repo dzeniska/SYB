@@ -30,7 +30,7 @@ import java.util.*
 
 
 class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
-    var rootElement: FragmentProgessBinding? = null
+    lateinit var rootElement: FragmentProgessBinding
 
     val viewModel: GameViewModel by activityViewModels{
         GameViewModelFactory(LocalModel(activity as MainActivity))
@@ -113,17 +113,12 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
         }
 
         rootElement!!.fabPlay.setOnClickListener {
-            val fList = navController.backStack
-
-            fList.forEach {
-                Log.d("!!!fr", "${it.destination.label}")
-                if (it.destination.label == "fragment_tutorials") {
-                    navController.popBackStack()
-                    return@setOnClickListener
-                }
-            }
             Log.d("!!!fr", "navigate")
-            navController.navigate(R.id.action_progessFragment_to_tutorialsFragment)
+            if(viewModel.nav) {
+                navController.popBackStack()
+                viewModel.nav = false
+            }
+            else navController.navigate(R.id.action_progessFragment_to_tutorialsFragment)
         }
     }
     private fun fabPlay(isVisible: Boolean){
@@ -132,6 +127,7 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
 
     private fun init() {
         navController = findNavController()
+        InitBackStack.initBackStack(navController)
         rootElement!!.recyclerViewGamers.adapter = adapter
         rootElement!!.recyclerViewGamers.layoutManager = LinearLayoutManager(activity)
 
@@ -177,7 +173,7 @@ class ProgessFragment : Fragment(), ItemTouchMoveCallback.ItemTouchAdapter {
     override fun onDestroy() {
         super.onDestroy()
         rootElement!!.adView.destroy()
-        rootElement = null
+//        rootElement = null
     }
 
     private fun initAds(){

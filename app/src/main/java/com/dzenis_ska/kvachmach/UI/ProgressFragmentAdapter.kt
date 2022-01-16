@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dzenis_ska.kvachmach.*
 import com.google.android.material.snackbar.Snackbar
 
-class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fragment: ProgessFragment): RecyclerView.Adapter<ProgressFragmentAdapter.ViewHolder>(), ItemTouchMoveCallback.ItemTouchAdapter {
+class ProgressFragmentAdapter(val list: MutableList<GamerProgressClass>, val fragment: ProgessFragment):
+    RecyclerView.Adapter<ProgressFragmentAdapter.ViewHolder>(),
+    ItemTouchMoveCallback.ItemTouchAdapter {
     var const = 0
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {

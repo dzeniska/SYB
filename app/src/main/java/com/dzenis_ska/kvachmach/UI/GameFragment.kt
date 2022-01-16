@@ -10,6 +10,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.dzenis_ska.kvachmach.LocalModel.LocalModel
 import com.dzenis_ska.kvachmach.MainActivity
 import com.dzenis_ska.kvachmach.R
@@ -40,7 +41,7 @@ class GameFragment() : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        InitBackStack.initBackStack(findNavController())
 
 //                (activity as AppCompatActivity).supportActionBar?.title = resources.getString(R.string.tutorial)
                 (activity as AppCompatActivity).supportActionBar?.title = viewModel.title

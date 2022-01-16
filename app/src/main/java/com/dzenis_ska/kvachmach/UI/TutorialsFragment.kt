@@ -52,6 +52,7 @@ class TutorialsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         rootElement = FragmentTutorialsBinding.inflate(inflater)
         return rootElement!!.root
     }
@@ -85,15 +86,17 @@ class TutorialsFragment : Fragment() {
                 viewModel.quantityGamers = changedGamers.size
 
             } else {
-                CoroutineScope(Dispatchers.Main).launch {
-                    Toast.makeText(
-                        activity as MainActivity,
-                        "Активируйте не менее 2-хучастников!",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    count(1000)
+//                CoroutineScope(Dispatchers.Main).launch {
+//                    count(1000)
+//                    val fList = navController.backQueue
+//
+//                            fList.forEach {
+//                                Log.d("!!!navController", "${it.destination.id} == ${R.id.progessFragment}")
+////                                if(it.destination.id == R.id.progessFragment) navController.popBackStack(R.id.progessFragment, true)
+//                            }
+                    viewModel.nav = true
                     navController.navigate(R.id.action_tutorialsFragment_to_progessFragment)
-                }
+//                }
             }
         })
 
@@ -221,10 +224,15 @@ class TutorialsFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        hideSoftKeyboards()
+    }
 
     private fun init() {
         loadInterAd()
         navController = findNavController()
+        InitBackStack.initBackStack(navController)
         player = MediaPlayer.create(activity as MainActivity, R.raw.fart_2)
         player2 = MediaPlayer.create(activity as MainActivity, R.raw.fart_3)
         player.isLooping = false
@@ -254,6 +262,7 @@ class TutorialsFragment : Fragment() {
         )
     }
 
+
     fun showInterAd() {
         if (interAd != null) {
             interAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
@@ -281,9 +290,15 @@ class TutorialsFragment : Fragment() {
     private fun showSoftKeyboard(view: View) {
         if (view.requestFocus()) {
             val inputMethodManager: InputMethodManager =
-                getActivity()?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
         }
+    }
+    private fun hideSoftKeyboards() {
+        val inputMethodManager: InputMethodManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+        inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
     }
     private suspend fun count(timeMillis: Long) = withContext(Dispatchers.IO) {
         delay(timeMillis)

@@ -30,6 +30,8 @@ class GameViewModel(val localModel: LocalModel) : ViewModel() {
 
     var index: Int = 0
 
+    var nav = false
+
     // Для подсчёта круга
     var quantityGamers: Int = 0
     private var countGamers: Int = 0

@@ -19,7 +19,7 @@
         android:gravity="center"
         android:inputType="textMultiLine|textNoSuggestions"
         android:padding="16dp"
-        android:text="Нет времени думать, жми START"
+        android:text="@string/hello"
         android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -48,16 +48,17 @@
 
     <TextView
         android:id="@+id/tvCounter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:alpha="0.5"
+        android:gravity="center"
         android:text="0"
-        android:textSize="450sp"
+        android:textSize="400sp"
         android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/tvQ" />
 
     <EditText
         android:id="@+id/edQ"

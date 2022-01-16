@@ -2,6 +2,7 @@ package com.dzenis_ska.kvachmach
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -12,6 +13,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.navOptions
 import com.dzenis_ska.kvachmach.LocalModel.LocalModel
 import com.dzenis_ska.kvachmach.UI.DialogInstr
 import com.dzenis_ska.kvachmach.ViewModel.GameViewModel
@@ -98,17 +100,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     viewModel.getAllNames()
                     job = null
                 }
-                navController.navigate(R.id.tutorialsFragment)
+                navigateTo(R.id.tutorialsFragment)
+//                navController.navigate(R.id.tutorialsFragment)
+//                navController.popBackStack(R.id.tutorialsFragment, true)
                 rootElement.drawerLayout.closeDrawer(GravityCompat.START)
             }
             R.id.id_tutorial -> {
-                navController.navigate(R.id.gameFragment)
+                navigateTo(R.id.gameFragment)
+//                navController.navigate(R.id.gameFragment)
+//                navController.popBackStack(R.id.gameFragment, true)
                 rootElement.drawerLayout.closeDrawer(GravityCompat.START)
             }
             R.id.id_progress -> {
                 job = CoroutineScope(Dispatchers.Main).launch {
                     viewModel.getAllNames()
-                    navController.navigate(R.id.progessFragment)
+                    navigateTo(R.id.progessFragment)
+//                    navController.navigate(R.id.progessFragment)
+//                    navController.popBackStack(R.id.progessFragment, true)
                     count(450)
                     rootElement.drawerLayout.closeDrawer(GravityCompat.START)
                     job = null
@@ -121,6 +129,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         return true
     }
+
+    private fun navigateTo(id: Int) {
+        var bool = false
+        navController.backQueue.forEach {
+            if(it.destination.id == id) bool = true
+            Log.d("!!!navController", "${it.destination.label} _ ${bool}")
+//            when(it.destination.label) {
+//                "fragment_game" -> {
+//                    idToBack = R.id.gameFragment
+////                    return@forEach
+//                }
+//                "fragment_progess" -> {
+//                    idToBack = R.id.progessFragment
+////                    return@forEach
+//
+//                }
+//                "fragment_game" -> {
+//                    idToBack = R.id.gameFragment
+////                    return@forEach
+//                }
+//            }
+        }
+
+        navController.navigate(id, null, navOptions {
+//            if(idToBack != null){
+                popUpTo(id) { inclusive = bool }
+//            }
+        })
+    }
+
     private suspend fun count(timeMillis: Long) = withContext(Dispatchers.IO) {
         delay(timeMillis)
         attempt = 0

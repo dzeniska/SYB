@@ -16,6 +16,8 @@
     <string name="add_gamer">Добавь участника для викторины</string>
     <string name="tutorial_toolbar">Почитай, если нехуй делать!</string>
 
+    <string name="hello">Активируйте не менее 2-х участников!</string>
+
 
     <string name="discharge_progress">Обнулите прогресс у победителя или у всех участников викторины, чтобы начать новую игру!
     Но это необязательно!)
@@ -47,9 +49,9 @@
     <string name="need_delete_or_reprogress_gamer">Для сброса достижений игрока потяните \"ВПРАВО\".\n Для удаления игрока потяните \"ВЛЕВО\"</string>
 
     <!-- Реклама -->
-    <!--<string name="ad_id">ca-app-pub-3940256099942544/6300978111</string>-->
+<!--    <string name="ad_id">ca-app-pub-3940256099942544/6300978111</string>-->
     <string name="ad_id">ca-app-pub-8644370805049292/7519786153</string>
-    <!--<string name="ad_inter_id">ca-app-pub-3940256099942544/1033173712</string>-->
+<!--    <string name="ad_inter_id">ca-app-pub-3940256099942544/1033173712</string>-->
     <string name="ad_inter_id">ca-app-pub-8644370805049292/4056959965</string>
 
 </resources>
